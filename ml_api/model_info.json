@@ -1,0 +1,33 @@
+{
+  "accuracy": 0.58,
+  "training_date": "2025-06-10T23:24:19.539992",
+  "samples_trained": 400,
+  "test_accuracy": 0.58,
+  "classification_report": {
+    "0": {
+      "precision": 0.6451612903225806,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.6557377049180327,
+      "support": 60.0
+    },
+    "1": {
+      "precision": 0.47368421052631576,
+      "recall": 0.45,
+      "f1-score": 0.46153846153846156,
+      "support": 40.0
+    },
+    "accuracy": 0.58,
+    "macro avg": {
+      "precision": 0.5594227504244482,
+      "recall": 0.5583333333333333,
+      "f1-score": 0.5586380832282472,
+      "support": 100.0
+    },
+    "weighted avg": {
+      "precision": 0.5765704584040747,
+      "recall": 0.58,
+      "f1-score": 0.5780580075662043,
+      "support": 100.0
+    }
+  }
+}
