@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>{{ subject }}</title>
+</head>
+<body style="font-family: 'Segoe UI', Arial, sans-serif; background: #f6f6fa; margin: 0; padding: 0;">
+  <div style="max-width: 520px; margin: 40px auto; background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(80,80,180,0.08); padding: 40px 32px 32px 32px;">
+    <!-- Logo -->
+    <div style="display: flex; align-items: center; margin-bottom: 28px;">
+      <div style="background: #ede6f7; padding: 8px 24px; border-radius: 8px; display: inline-block;">
+        <span style="font-size: 2rem; font-weight: bold; color: #222; letter-spacing: 1px; font-family: 'Segoe UI', Arial, sans-serif;">Innovest</span>
+      </div>
+    </div>
+    <!-- Greeting -->
+    <h2 style="margin: 0 0 18px 0; font-size: 1.5rem; color: #233876; font-weight: 700;">Hey, {{ recipient_name }}</h2>
+    <!-- Message Body -->
+    <p style="color: #444; font-size: 1.08rem; line-height: 1.7; margin-bottom: 24px;">{{ message_body|safe }}</p>
+    <hr style="margin: 32px 0 18px 0; border: none; border-top: 1px solid #eee;">
+    <!-- Signature -->
+    <div style="display: flex; align-items: center;">
+      <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Innovest" style="width: 44px; height: 44px; border-radius: 50%; margin-right: 14px; border: 2px solid #ede6f7;">
+      <div>
+        <div style="font-weight: bold; color: #233876; font-size: 1.08rem;">Innovest</div>
+        <div style="color: #888; font-size: 15px;">Admin Team</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html> 
