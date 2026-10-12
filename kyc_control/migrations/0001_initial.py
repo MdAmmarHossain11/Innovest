@@ -46,6 +46,7 @@ class Migration(migrations.Migration):
                 'db_table': 'authentication_customuser_kyc',
                 'verbose_name': 'User KYC',
                 'verbose_name_plural': 'User KYCs',
+                'managed': False,
             },
         ),
     ]

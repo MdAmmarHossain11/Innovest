@@ -1,5 +1,6 @@
 from django.db import models
 from authentication.models import CustomUser
+from companies.models import Company
 
 
 class CompanyEvent(models.Model):
@@ -9,8 +10,12 @@ class CompanyEvent(models.Model):
     ]
 
     id = models.AutoField(primary_key=True, db_column='id')
+    company = models.ForeignKey(
+        Company, on_delete=models.CASCADE, related_name='events',
+        null=True, blank=True)
     user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, db_column='user_id')
+        CustomUser, on_delete=models.CASCADE, db_column='user_id',
+        null=True, blank=True)
     title = models.TextField(db_column='title')
     description = models.TextField(
         null=True, blank=True, db_column='description')
@@ -23,7 +28,7 @@ class CompanyEvent(models.Model):
         null=True, blank=True, db_column='categories')
     registration_form = models.TextField(
         null=True, blank=True, db_column='registration_form')
-    privacy = models.TextField(db_column='privacy')
+    privacy = models.TextField(db_column='privacy', default='publish')
     start_at = models.DateTimeField(null=True, db_column='start_at')
     end_at = models.DateTimeField(null=True, db_column='end_at')
     registration_end = models.DateTimeField(
