@@ -1,0 +1,1544 @@
+.funding-setup-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.setup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.setup-header h1 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.setup-content {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+}
+
+.setup-sidebar {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.setup-nav {
+  margin-bottom: 2rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid transparent;
+}
+
+.nav-item:hover {
+  background-color: #f0f7ff;
+  transform: translateX(5px);
+}
+
+.nav-item.active {
+  background-color: #e3f2fd;
+  border-color: #1976d2;
+}
+
+.nav-icon {
+  margin-right: 1rem;
+  font-size: 1.5rem;
+}
+
+.nav-text h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.nav-text p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.setup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.setup-actions button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.save-btn {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.preview-btn {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.launch-btn {
+  background-color: #1976d2;
+  color: white;
+}
+
+.setup-help {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.setup-help h4 {
+  margin: 0 0 1rem 0;
+}
+
+.setup-help ul {
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.consult-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.setup-form-container {
+  position: relative;
+  width: 100%;
+}
+
+.setup-form {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.investment-type-selection {
+  text-align: center;
+}
+
+.investment-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.investment-option {
+  padding: 2rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.investment-option:hover {
+  border-color: #1976d2;
+  transform: translateY(-2px);
+}
+
+.investment-option.selected {
+  border-color: #1976d2;
+  background-color: #e3f2fd;
+}
+
+.investment-option img {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1rem;
+}
+
+.investment-option h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.investment-option p {
+  margin: 0;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.form-section {
+  margin: 2rem 0;
+}
+
+.form-section h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.875rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  outline: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #a0aec0;
+}
+
+.description-input {
+  position: relative;
+}
+
+.description-input textarea {
+  resize: none;
+  height: 100px;
+  padding-right: 100px;
+}
+
+.character-count {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  font-size: 0.8rem;
+  color: #718096;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.location-group {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.location-input {
+  width: 100%;
+}
+
+.key-assets-section {
+  margin-top: 3rem;
+  border-top: 2px solid #f7fafc;
+  padding-top: 2rem;
+}
+
+.key-assets-section h2 {
+  color: #2d3748;
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.assets-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #edf2f7;
+}
+
+.asset-tab {
+  padding: 1rem 2rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: #718096;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.asset-tab:hover {
+  color: #3498db;
+  background-color: #f8fafc;
+}
+
+.asset-tab.active {
+  color: #3498db;
+  font-weight: 600;
+}
+
+.asset-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #3498db;
+}
+
+.asset-content {
+  padding: 2rem;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 2px solid #edf2f7;
+}
+
+.asset-description {
+  color: #718096;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.image-upload-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.image-placeholder {
+  width: 560px;
+  height: 310px;
+  border: 2px dashed #cbd5e0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.image-placeholder:hover {
+  border-color: #3498db;
+  background-color: #f8fafc;
+}
+
+.placeholder-icon {
+  font-size: 3.5rem;
+  color: #cbd5e0;
+  transition: all 0.2s ease;
+}
+
+.image-placeholder:hover .placeholder-icon {
+  color: #3498db;
+  transform: scale(1.1);
+}
+
+.file-upload {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-upload input[type="text"] {
+  flex: 1;
+  background-color: white;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.875rem;
+  color: #2d3748;
+  font-size: 0.95rem;
+}
+
+.select-image-btn {
+  padding: 0.875rem 1.5rem;
+  background-color: #3498db;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.select-image-btn:hover {
+  background-color: #2980b9;
+  transform: translateY(-1px);
+}
+
+.image-requirements {
+  color: #718096;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.form-actions {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f7fafc;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.save-changes-btn {
+  padding: 0.875rem 2rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-changes-btn:hover {
+  background-color: #2980b9;
+  transform: translateY(-1px);
+}
+
+.visibility-toggle {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.visibility-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.visibility-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+}
+
+.additional-terms {
+  margin-top: 1.5rem;
+}
+
+.additional-terms textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.currency-input,
+.percentage-input {
+  position: relative;
+}
+
+.currency-input input,
+.percentage-input input {
+  padding-left: 1.5rem;
+}
+
+.currency-input::before {
+  content: "৳";
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.percentage-input::after {
+  content: "%";
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.form-group input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  margin-left: 0.5rem;
+  color: #666;
+  cursor: help;
+}
+
+.tooltip:hover::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem;
+  background-color: #333;
+  color: white;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.company-form {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* Business Plan Form Styles */
+.business-plan-form {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.business-plan-form h2 {
+  border-bottom: 2px solid #f5f7fa;
+  padding-bottom: 15px;
+  margin-top: 40px;
+  margin-bottom: 25px;
+  font-weight: 700;
+  color: #1a202c;
+  font-size: 24px;
+  position: relative;
+}
+
+.business-plan-form h2::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #4776E6, #8E54E9);
+  border-radius: 3px;
+}
+
+.business-plan-form h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.business-plan-form .form-section {
+  margin-bottom: 40px;
+  padding: 25px;
+  border: none;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .form-section:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.business-plan-form .full-width-input {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.business-plan-form .full-width-input:focus {
+  border-color: #4776E6;
+  box-shadow: 0 0 0 3px rgba(71, 118, 230, 0.1);
+  outline: none;
+}
+
+.business-plan-form .editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+
+.business-plan-form .toolbar-btn {
+  padding: 8px 12px;
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.business-plan-form .toolbar-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.business-plan-form .editor-area {
+  width: 100%;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 0 0 8px 8px;
+  min-height: 180px;
+  resize: vertical;
+  font-size: 16px;
+  line-height: 1.6;
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .editor-area:focus {
+  border-color: #4776E6;
+  box-shadow: 0 0 0 3px rgba(71, 118, 230, 0.1);
+  outline: none;
+}
+
+.business-plan-form .funding-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 25px 0;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.business-plan-form .funding-text {
+  color: #4a5568;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.business-plan-form .currency-input {
+  width: 100px;
+  text-align: center;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #3182ce;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.business-plan-form .currency-input:focus {
+  border-color: #4776E6;
+  box-shadow: 0 0 0 3px rgba(71, 118, 230, 0.1);
+  outline: none;
+}
+
+.business-plan-form .two-column {
+  display: flex;
+  gap: 30px;
+}
+
+.business-plan-form .column {
+  flex: 1;
+}
+
+.business-plan-form .traction-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.business-plan-form .traction-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.business-plan-form .bullet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  color: #fff;
+  background: linear-gradient(45deg, #48bb78, #38b2ac);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.business-plan-form .form-group {
+  margin-bottom: 20px;
+}
+
+.business-plan-form .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 15px;
+}
+
+.business-plan-form .form-group select,
+.business-plan-form .form-group input,
+.business-plan-form .form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.business-plan-form .form-group select:focus,
+.business-plan-form .form-group input:focus,
+.business-plan-form .form-group textarea:focus {
+  border-color: #4776E6;
+  box-shadow: 0 0 0 3px rgba(71, 118, 230, 0.1);
+  outline: none;
+}
+
+.business-plan-form .team-member {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .team-member:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transform: translateY(-3px);
+}
+
+.business-plan-form .avatar-section {
+  width: 60px;
+}
+
+.business-plan-form .avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  background-color: #edf2f7;
+  border-radius: 10px;
+  border: 1px dashed #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #a0aec0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .avatar-placeholder:hover {
+  background-color: #e2e8f0;
+  color: #718096;
+}
+
+.business-plan-form .avatar-placeholder::after {
+  content: '+';
+}
+
+.business-plan-form .team-member-inputs {
+  flex: 1;
+}
+
+.business-plan-form .team-member-large {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .team-member-large:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+}
+
+.business-plan-form .team-avatar-placeholder {
+  width: 100px;
+  height: 100px;
+  background-color: #edf2f7;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #a0aec0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .team-avatar-placeholder:hover {
+  background-color: #e2e8f0;
+  color: #718096;
+}
+
+.business-plan-form .team-avatar-placeholder::after {
+  content: '+';
+}
+
+.business-plan-form .team-info {
+  flex: 1;
+}
+
+.business-plan-form .social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.business-plan-form .social-input {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 120px;
+}
+
+.business-plan-form .social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  margin-right: 8px;
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .social-icon:hover {
+  transform: scale(1.05);
+}
+
+.business-plan-form .linkedin {
+  background: linear-gradient(45deg, #0077b5, #00a0dc);
+}
+
+.business-plan-form .facebook {
+  background: linear-gradient(45deg, #3b5998, #4c6ef5);
+}
+
+.business-plan-form .twitter {
+  background: linear-gradient(45deg, #1da1f2, #38bdf8);
+}
+
+.business-plan-form .add-team-member-btn {
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 15px;
+  width: 100%;
+  text-align: center;
+  color: #64748b;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .add-team-member-btn:hover {
+  background-color: #f1f5f9;
+  color: #3182ce;
+  border-color: #a0aec0;
+}
+
+.business-plan-form .document-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.business-plan-form .upload-control {
+  display: flex;
+  gap: 15px;
+}
+
+.business-plan-form .upload-control input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  font-size: 15px;
+}
+
+.business-plan-form .upload-btn {
+  padding: 12px 20px;
+  background-color: #4776E6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .upload-btn:hover {
+  background-color: #3662c7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(71, 118, 230, 0.3);
+}
+
+.business-plan-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 2px solid #f5f7fa;
+}
+
+.business-plan-form .save-changes-btn {
+  padding: 15px 30px;
+  background: linear-gradient(45deg, #4776E6, #8E54E9);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(71, 118, 230, 0.3);
+}
+
+.business-plan-form .save-changes-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(71, 118, 230, 0.4);
+}
+
+@media (max-width: 768px) {
+  .business-plan-form .two-column {
+    flex-direction: column;
+  }
+  
+  .business-plan-form .social-links {
+    flex-direction: column;
+  }
+}
+
+/* Additional modern UI styles for business plan */
+
+.business-plan-form .completion-status {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.business-plan-form .progress-bar {
+  flex: 1;
+  height: 8px;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.business-plan-form .progress {
+  height: 100%;
+  background: linear-gradient(90deg, #4776E6, #8E54E9);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.business-plan-form .section-info {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 15px;
+  font-style: italic;
+  padding-left: 5px;
+  border-left: 3px solid #e2e8f0;
+}
+
+.business-plan-form .toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e2e8f0;
+  margin: 0 5px;
+}
+
+.business-plan-form .info-tooltip {
+  display: inline-block;
+  margin-left: 8px;
+  position: relative;
+  cursor: help;
+}
+
+.business-plan-form .tooltip-content {
+  position: absolute;
+  top: -5px;
+  left: 25px;
+  transform: translateY(-100%);
+  background-color: #334155;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  width: 220px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 10;
+  pointer-events: none;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.business-plan-form .tooltip-content::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  background-color: #334155;
+  transform: rotate(45deg);
+}
+
+.business-plan-form .funding-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.business-plan-form .funding-item label {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 5px;
+}
+
+.business-plan-form .document-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.business-plan-form .document-type {
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 30px;
+  background-color: #f1f5f9;
+  color: #64748b;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .document-type:hover {
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+.business-plan-form .save-draft-btn {
+  padding: 15px 25px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  border-radius: 8px;
+  margin-right: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.business-plan-form .save-draft-btn:hover {
+  background-color: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-90%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-100%);
+  }
+}
+
+.ckeditor-container {
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.ckeditor-container .ck-editor__editable {
+  min-height: 100px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.ckeditor-container .ck-toolbar {
+  border: none !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* Modern UI for FundingSetup */
+
+.funding-setup-container.modern-ui {
+  font-family: 'Inter', Arial, sans-serif;
+  background: #f7f9fb;
+  min-height: 100vh;
+  padding: 32px 0;
+}
+
+.card-shadow {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1.5px 4px rgba(0,0,0,0.03);
+  padding: 32px 28px;
+  margin-bottom: 32px;
+}
+
+.setup-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: #e5eaf1;
+  border-radius: 4px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #4f8cff 0%, #38cfa6 100%);
+  border-radius: 4px;
+  transition: width 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+.responsive-flex {
+  display: flex;
+  gap: 32px;
+}
+
+.setup-sidebar {
+  min-width: 270px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.setup-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-item.modern-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  background: transparent;
+  outline: none;
+  border: none;
+}
+.nav-item.modern-nav.active, .nav-item.modern-nav:focus {
+  background: #eaf3ff;
+  box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+}
+.nav-icon {
+  font-size: 1.7rem;
+}
+.check-icon {
+  color: #38cfa6;
+}
+
+.setup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.btn {
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+.btn-primary {
+  background: #4f8cff;
+  color: #fff;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: #2563eb;
+}
+.btn-secondary {
+  background: #eaf3ff;
+  color: #2563eb;
+}
+.btn-secondary:hover, .btn-secondary:focus {
+  background: #d1e6ff;
+}
+.btn-success {
+  background: #38cfa6;
+  color: #fff;
+}
+.btn-success:hover, .btn-success:focus {
+  background: #1fa97c;
+}
+.btn-outline {
+  background: #fff;
+  color: #4f8cff;
+  border: 2px solid #4f8cff;
+}
+.btn-outline:hover, .btn-outline:focus {
+  background: #eaf3ff;
+}
+
+.setup-help {
+  font-size: 0.98rem;
+  background: #f7f9fb;
+  border: 1px solid #e5eaf1;
+  border-radius: 12px;
+  padding: 20px 18px;
+}
+.setup-help h4 {
+  margin-top: 0;
+  color: #4f8cff;
+}
+.setup-help ul {
+  margin: 10px 0 0 18px;
+  padding: 0;
+}
+
+.modern-form-area {
+  flex: 1;
+  min-width: 0;
+}
+
+.setup-form.card-shadow {
+  margin-bottom: 0;
+}
+
+/* Inputs and file upload */
+input[type="text"], input[type="email"], input[type="number"], input[type="url"], input[type="tel"], select, textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #e5eaf1;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-top: 6px;
+  margin-bottom: 14px;
+  background: #f7f9fb;
+  transition: border 0.18s, box-shadow 0.18s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #4f8cff;
+  box-shadow: 0 0 0 2px #eaf3ff;
+  outline: none;
+}
+
+.upload-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.upload-btn, .select-image-btn {
+  padding: 8px 18px;
+  border-radius: 7px;
+  background: #4f8cff;
+  color: #fff;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.upload-btn:hover, .select-image-btn:hover {
+  background: #2563eb;
+}
+
+.document-upload, .image-upload-area {
+  margin-top: 10px;
+  margin-bottom: 18px;
+}
+
+.image-placeholder {
+  width: 180px;
+  height: 100px;
+  background: #eaf3ff;
+  border: 2px dashed #b6d4fe;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: border 0.18s, background 0.18s;
+}
+.image-placeholder.dragging {
+  border-color: #4f8cff;
+  background: #d1e6ff;
+}
+.placeholder-icon {
+  font-size: 2.2rem;
+  color: #4f8cff;
+}
+
+.image-requirements {
+  font-size: 0.92rem;
+  color: #7a8ca3;
+  margin-top: 4px;
+}
+
+/* Section headers and info */
+.setup-form h1, .setup-form h2, .setup-form h3 {
+  margin-top: 0;
+  color: #2563eb;
+}
+.section-info {
+  background: #eaf3ff;
+  color: #2563eb;
+  border-radius: 7px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  font-size: 0.98rem;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .responsive-flex {
+    flex-direction: column;
+    gap: 0;
+  }
+  .setup-sidebar {
+    max-width: 100%;
+    min-width: 0;
+    margin-bottom: 24px;
+  }
+}
+@media (max-width: 700px) {
+  .card-shadow, .setup-header.card-shadow {
+    padding: 18px 8px;
+  }
+  .setup-form h1, .setup-form h2, .setup-form h3 {
+    font-size: 1.1rem;
+  }
+  .setup-header h1 {
+    font-size: 1.2rem;
+  }
+}
+
+/* Misc */
+.character-count {
+  font-size: 0.92rem;
+  color: #7a8ca3;
+  float: right;
+  margin-top: -28px;
+  margin-bottom: 10px;
+}
+
+.asset-tab.active {
+  background: #eaf3ff;
+  color: #2563eb;
+  border-radius: 7px;
+}
+
+.asset-tab {
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  margin-right: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.asset-tab:hover {
+  background: #f7f9fb;
+  color: #4f8cff;
+}
+
+/* Modern Slide/Page Name List Styles */
+.slide-names-list, .modern-slide-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.slide-name-row, .modern-slide-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f7f9fb;
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 1px 4px rgba(79,140,255,0.04);
+  transition: box-shadow 0.18s;
+}
+.slide-name-row:focus-within, .modern-slide-row:focus-within {
+  box-shadow: 0 2px 8px rgba(79,140,255,0.10);
+}
+
+.slide-name-input, .modern-slide-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid #e5eaf1;
+  border-radius: 7px;
+  font-size: 1rem;
+  background: #fff;
+  transition: border 0.18s, box-shadow 0.18s;
+}
+.slide-name-input:focus, .modern-slide-input:focus {
+  border-color: #4f8cff;
+  box-shadow: 0 0 0 2px #eaf3ff;
+  outline: none;
+}
+
+.slide-controls, .modern-slide-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.slide-btn, .modern-slide-btn {
+  background: #eaf3ff;
+  color: #2563eb;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slide-btn:disabled, .modern-slide-btn:disabled {
+  background: #f0f4fa;
+  color: #b6c6e3;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.slide-btn:not(:disabled):hover, .modern-slide-btn:not(:disabled):hover {
+  background: #4f8cff;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(79,140,255,0.10);
+}
+
+.add-slide-btn, .modern-add-slide-btn {
+  margin-top: 8px;
+  align-self: flex-start;
+  background: #38cfa6;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+  box-shadow: 0 1px 4px rgba(56,207,166,0.08);
+}
+.add-slide-btn:hover, .modern-add-slide-btn:hover {
+  background: #1fa97c;
+  box-shadow: 0 2px 8px rgba(56,207,166,0.15);
+}
+
+@media (max-width: 700px) {
+  .slide-name-row, .modern-slide-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 8px;
+  }
+  .slide-controls, .modern-slide-controls {
+    justify-content: flex-end;
+  }
+}
+
+/* Add more as needed for your custom UI */ 
