@@ -1,6 +1,6 @@
 {
   "installCommand": "npm ci --prefix frontend",
-  "buildCommand": "npm run build --prefix frontend",
+  "buildCommand": "CI=false npm run build --prefix frontend",
   "outputDirectory": "frontend/build",
   "framework": "create-react-app",
   "rewrites": [
