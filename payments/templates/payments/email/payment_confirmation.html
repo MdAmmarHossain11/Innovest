@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        .details {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Payment Confirmation</h1>
+    </div>
+    
+    <div class="content">
+        <p>Dear {{ user_name }},</p>
+        
+        <p>Thank you for your investment in {{ company_name }}. Your payment has been successfully processed.</p>
+        
+        <div class="details">
+            <h3>Transaction Details:</h3>
+            <p><strong>Company:</strong> {{ company_name }}</p>
+            <p><strong>Amount:</strong> <span class="amount">৳{{ amount|floatformat:2 }}</span></p>
+            <p><strong>Transaction ID:</strong> {{ transaction_id }}</p>
+            <p><strong>Date:</strong> {{ date }}</p>
+        </div>
+        
+        <p>You can view your investment details in your dashboard at any time.</p>
+        
+        <p>If you have any questions or concerns, please don't hesitate to contact our support team.</p>
+        
+        <p>Best regards,<br>The Innovest Team</p>
+    </div>
+    
+    <div class="footer">
+        <p>This is an automated message, please do not reply to this email.</p>
+        <p>© {% now "Y" %} Innovest. All rights reserved.</p>
+    </div>
+</body>
+</html> 
