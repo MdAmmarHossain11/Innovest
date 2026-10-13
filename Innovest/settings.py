@@ -71,7 +71,6 @@ INSTALLED_APPS = [
     'community_backend',
     'my_companies_trackprogress',
     'my_companies_permission',
-    'kyc',
     'kyc_control',
     'company_addUser',
 ]
