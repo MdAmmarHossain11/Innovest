@@ -26,7 +26,6 @@ axiosInstance.interceptors.response.use(
 
 const register = async (userData) => {
     try {
-        console.log('Attempting registration with data:', userData);
         const response = await axiosInstance.post('register/', userData);
         console.log('Registration response:', response.data);
         return response.data;

@@ -33,7 +33,6 @@ class RegisterView(views.APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        print('Registration request received:', request.data)
         email = request.data.get('email', '').strip().lower()
         existing_user = User.objects.filter(email__iexact=email).first()
 
@@ -54,19 +53,17 @@ class RegisterView(views.APIView):
 
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            print('Serializer is valid, creating user...')
             user = serializer.save()
-            print('User created successfully:', user.email)
-            
+
             try:
-                print('Attempting to send verification email to:', user.email)
                 send_verification_email(user)
-                print('Verification email sent successfully')
-            except Exception as e:
+            except Exception:
                 logger.exception('Unable to send verification email to %s', user.email)
-                user.delete()
                 return Response({
-                    'error': 'Unable to send the verification email. Please try again later.'
+                    'error': (
+                        'Your account was created, but we could not send the verification email. '
+                        'Please try registering with the same email again later or contact support.'
+                    )
                 }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
             
             return Response({

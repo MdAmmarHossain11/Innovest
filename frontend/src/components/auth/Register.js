@@ -192,6 +192,10 @@ const Register = () => {
                 }
             } else if (err.response?.data?.errors) {
                 setValidationErrors(err.response.data.errors);
+            } else if (err.error) {
+                setError(err.error);
+            } else if (typeof err.detail === 'string') {
+                setError(err.detail);
             } else if (err.response?.data?.error) {
                 setError(err.response.data.error);
             } else if (err.response?.data?.message) {
@@ -208,7 +212,7 @@ const Register = () => {
                 // Handle 400 Bad Request - often means duplicate email
                 setError('This email has already been used to create an account. Please use a different email or try signing in.');
             } else {
-                setError('An error occurred during registration. Please try again.');
+                setError(err.message || 'An error occurred during registration. Please try again.');
             }
         } finally {
             setLoading(false);
