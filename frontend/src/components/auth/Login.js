@@ -62,8 +62,7 @@ const Login = () => {
 
         try {
             const response = await authService.login(formData.email, formData.password);
-            // Check user_type and redirect accordingly
-            if (response.user.user_type === 'admin') {
+            if (authService.isAdmin(response.user)) {
                 navigate('/admin-dashboard', { replace: true });
             } else {
                 navigate('/dashboard', { replace: true });

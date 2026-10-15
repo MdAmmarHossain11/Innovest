@@ -82,7 +82,8 @@ User records live in the Supabase PostgreSQL table
 inspect accounts. For example:
 
 ```sql
-SELECT id, email, first_name, last_name, user_type, is_active, email_verified
+SELECT id, email, first_name, last_name, user_type, is_staff, is_superuser,
+       is_active, email_verified
 FROM authentication_customuser
 ORDER BY id;
 ```
@@ -108,6 +109,9 @@ Use these updates carefully: `is_superuser = TRUE` grants full Django
 administrative access. Never create user rows by inserting plaintext passwords;
 use the website registration flow first, then manage account status and trusted
 admin privileges through the Supabase SQL Editor or the site's admin dashboard.
+The application recognizes an administrator when `user_type = 'admin'`,
+`is_staff = TRUE`, or `is_superuser = TRUE`. Log out and back in after changing
+these flags so the browser reloads the user's current role.
 
 Render's free API service can sleep while idle, so its first request afterward
 can take about a minute. Supabase Free projects have a 500 MB database limit
@@ -115,6 +119,11 @@ and can pause after a week without activity. Keep a separate backup of important
 data and review provider limits before using this demo with real users or
 documents. Free-plan URLs remain provider-managed and are not a service-level
 guarantee of permanent availability.
+If Render reports an HTTP health-check timeout, review the service's **Logs**
+around the alert timestamp for worker timeouts, database connection failures,
+or restarts. The health endpoint is `/api/health/`; the Render start command
+uses a threaded Gunicorn worker to keep it responsive while another request is
+waiting on I/O.
 
 ## Checks
 

@@ -81,6 +81,35 @@ const getCurrentUser = () => {
     return user ? JSON.parse(user) : null;
 };
 
+const storeCurrentUser = (userData) => {
+    const currentUser = getCurrentUser();
+    if (!currentUser) return;
+    localStorage.setItem('user', JSON.stringify({ ...currentUser, ...userData }));
+};
+
+const updateCurrentUser = (userData) => {
+    storeCurrentUser(userData);
+};
+
+const getProfile = async () => {
+    const user = getCurrentUser();
+    if (!user?.access) {
+        throw new Error('No authentication token found');
+    }
+
+    try {
+        const response = await axiosInstance.get('profile/', {
+            headers: { Authorization: `Bearer ${user.access}` }
+        });
+        const { user_type, is_staff, is_superuser, is_active, email_verified } = response.data;
+        storeCurrentUser({ user_type, is_staff, is_superuser, is_active, email_verified });
+        return response.data;
+    } catch (error) {
+        if (error.response) throw error;
+        throw new Error('Network error occurred. Please check your connection.');
+    }
+};
+
 const updateProfile = async (userData) => {
     try {
         const user = getCurrentUser();
@@ -88,9 +117,14 @@ const updateProfile = async (userData) => {
             throw new Error('No authentication token found');
         }
 
-        const response = await axiosInstance.put('profile/', userData, {
-            headers: { Authorization: `Bearer ${user.access}` }
+        const headers = { Authorization: `Bearer ${user.access}` };
+        if (userData instanceof FormData) {
+            headers['Content-Type'] = 'multipart/form-data';
+        }
+        const response = await axiosInstance.patch('profile/', userData, {
+            headers
         });
+        storeCurrentUser(response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -137,17 +171,24 @@ const isAuthenticated = () => {
     return !!token;
 };
 
+const isAdmin = (user) => Boolean(
+    user && (user.user_type === 'admin' || user.is_staff || user.is_superuser)
+);
+
 const authService = {
     register,
     login,
     logout,
     getCurrentUser,
+    getProfile,
+    updateCurrentUser,
     verifyEmail,
     updateProfile,
     forgotPassword,
     resetPassword,
     getToken,
-    isAuthenticated
+    isAuthenticated,
+    isAdmin
 };
 
 export default authService; 

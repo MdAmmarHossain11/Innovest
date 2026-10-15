@@ -379,7 +379,7 @@ function CompanyDetails() {
     const hasInvestmentAccess = Boolean(
         profileUser && (
             companyPermission === 'yes'
-            || profileUser.user_type === 'admin'
+            || authService.isAdmin(profileUser)
             || profileUser.id === company.user_id
         )
     );
@@ -617,7 +617,7 @@ function CompanyDetails() {
                                             )
                                         });
 
-                                        return (user && (companyPermission === 'yes' || user.user_type === 'admin' || user.id === company.user_id)) ? (
+                                        return (user && (companyPermission === 'yes' || authService.isAdmin(user) || user.id === company.user_id)) ? (
                                             <Box>
                                                 <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, mb: 4 }}>
                                                     Business Plan
@@ -998,7 +998,7 @@ function CompanyDetails() {
                                 {/* Investment Card */}
                                 {(() => {
                                     const user = authService.getCurrentUser();
-                                    return (user && (companyPermission === 'yes' || user.user_type === 'admin' || user.id === company.user_id)) ? (
+                                    return (user && (companyPermission === 'yes' || authService.isAdmin(user) || user.id === company.user_id)) ? (
                                         <Card
                                             elevation={3}
                                             sx={{
@@ -1188,7 +1188,7 @@ function CompanyDetails() {
                                                 </Box>
                                                 {(() => {
                                                     const shouldShowDealButton = user &&
-                                                        user.user_type !== 'admin' &&
+                                                        !authService.isAdmin(user) &&
                                                         Number(user.id) !== Number(company.user_id) &&
                                                         !userHasPaidPayment;
                                                     console.log('Deal button condition check:', {

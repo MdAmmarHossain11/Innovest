@@ -620,7 +620,7 @@ def payment_list_create(request):
     elif request.method == 'GET':
         try:
             # Check if user is admin
-            if request.user.is_staff or request.user.is_superuser:
+            if request.user.is_platform_admin:
                 # Admin can see all payments
                 payments = Payment.objects.all()
             else:

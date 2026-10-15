@@ -35,7 +35,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
             # Check if user is admin
-            if request.user.user_type != 'admin':
+            if not request.user.is_platform_admin:
                 return Response({
                     'detail': 'Only admin users can create new users'
                 }, status=status.HTTP_403_FORBIDDEN)
@@ -80,7 +80,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         try:
             # Check if user is admin
-            if request.user.user_type != 'admin':
+            if not request.user.is_platform_admin:
                 return Response({
                     'detail': 'Only admin users can update users'
                 }, status=status.HTTP_403_FORBIDDEN)

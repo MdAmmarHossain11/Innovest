@@ -7,6 +7,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
     website = serializers.URLField(required=False, allow_blank=True, allow_null=True)
     dob = serializers.DateField(required=False, allow_null=True)
 
+    def to_internal_value(self, data):
+        if data.get('dob') == '':
+            data = data.copy()
+            data['dob'] = None
+        return super().to_internal_value(data)
+
     def validate_website(self, value):
         if not value:  # If empty or None, return as is
             return value

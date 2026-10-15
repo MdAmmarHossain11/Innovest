@@ -31,27 +31,31 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 class UserSerializer(serializers.ModelSerializer):
+    is_staff = serializers.BooleanField(read_only=True)
+    is_superuser = serializers.BooleanField(read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
+    email_verified = serializers.BooleanField(read_only=True)
+
     class Meta:
         model = User
         fields = (
             'id', 'email', 'first_name', 'last_name',
             'title', 'company', 'website', 'address', 'city', 'state', 'country', 'bio', 'profile_pic',
-            'user_type', 'phone', 'dob'
+            'user_type', 'is_staff', 'is_superuser', 'is_active', 'email_verified',
+            'phone', 'dob'
+        )
+        read_only_fields = (
+            'user_type', 'is_staff', 'is_superuser', 'is_active', 'email_verified'
         )
         extra_kwargs = {
             'email': {'required': True},
         }
 
     def update(self, instance, validated_data):
-        print("=== UserSerializer.update called ===")
-        print("validated_data:", validated_data)
         profile_pic = validated_data.pop('profile_pic', None)
         for attr, value in validated_data.items():
-            print(f"Setting {attr} to {value}")
             setattr(instance, attr, value)
         if profile_pic:
-            print("Updating profile_pic")
             instance.profile_pic = profile_pic
         instance.save()
-        print("User saved:", instance)
-        return instance 
+        return instance

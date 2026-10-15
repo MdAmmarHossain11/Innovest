@@ -525,16 +525,6 @@ function AdminDashboard() {
   const [importFile, setImportFile] = useState(null);
   const [importErrors, setImportErrors] = useState([]);
 
-  // Permission states
-  const [permissions, setPermissions] = useState({
-    canManageUsers: false,
-    canManageCompanies: false,
-    canViewAnalytics: false,
-    canExportData: false,
-    canBulkImport: false,
-    canManagePermissions: false,
-  });
-
   // Add a new state for the company view type
   const [companyView, setCompanyView] = useState('approved'); // 'approved', 'pending', 'rejected'
 
@@ -1040,43 +1030,9 @@ function AdminDashboard() {
     }
   };
 
-  // Fetch analytics data
-  const fetchAnalytics = async () => {
-    try {
-      const currentUser = authService.getCurrentUser();
-      const response = await axios.get(
-        `${API_URL}admin/analytics/`,
-        {
-          headers: { Authorization: `Bearer ${currentUser.access}` }
-        }
-      );
-      setAnalyticsData(response.data);
-    } catch (error) {
-      console.error('Error fetching analytics:', error);
-      setError('Failed to fetch analytics data');
-    }
-  };
-
-  // Fetch user permissions
-  const fetchPermissions = async () => {
-    try {
-      const currentUser = authService.getCurrentUser();
-      const response = await axios.get(
-        `${API_URL}admin/permissions/`,
-        {
-          headers: { Authorization: `Bearer ${currentUser.access}` }
-        }
-      );
-      setPermissions(response.data);
-    } catch (error) {
-      console.error('Error fetching permissions:', error);
-    }
-  };
-
   useEffect(() => {
     fetchUserProfile();
     fetchUsers();
-    fetchAnalytics(); // Fetch analytics data on mount
   }, [page, rowsPerPage, searchQuery, filters]);
 
   useEffect(() => {
@@ -1084,10 +1040,6 @@ function AdminDashboard() {
       fetchCompanies();
     }
   }, [value]);
-
-  useEffect(() => {
-    fetchPermissions();
-  }, []);
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
@@ -1142,7 +1094,7 @@ function AdminDashboard() {
       }
 
       // Check if current user is admin
-      if (currentUser.user_type !== 'admin') {
+      if (!authService.isAdmin(currentUser)) {
         setSnackbar({
           open: true,
           message: 'Only admin users can perform batch operations',
@@ -1212,7 +1164,7 @@ function AdminDashboard() {
       }
 
       // Check if current user is admin
-      if (currentUser.user_type !== 'admin') {
+      if (!authService.isAdmin(currentUser)) {
         setSnackbar({
           open: true,
           message: 'Only admin users can perform batch operations',
@@ -1341,7 +1293,7 @@ function AdminDashboard() {
       }
 
       // Check if current user is admin
-      if (currentUser.user_type !== 'admin') {
+      if (!authService.isAdmin(currentUser)) {
         setSnackbar({
           open: true,
           message: 'You do not have permission to delete users. Only admin users can perform this action.',
@@ -2181,7 +2133,7 @@ function AdminDashboard() {
       }
 
       // Check if current user is admin
-      if (currentUser.user_type !== 'admin') {
+      if (!authService.isAdmin(currentUser)) {
         setSnackbar({
           open: true,
           message: 'Only admin users can update other users',
@@ -2433,7 +2385,7 @@ function AdminDashboard() {
       }
 
       // Check if current user is admin
-      if (currentUser.user_type !== 'admin') {
+      if (!authService.isAdmin(currentUser)) {
         setSnackbar({
           open: true,
           message: 'Only admin users can create new users',
@@ -3153,7 +3105,7 @@ function AdminDashboard() {
       }
 
       // Check if current user is admin (companies can only be deleted by admin)
-      if (currentUser.user_type !== 'admin') {
+      if (!authService.isAdmin(currentUser)) {
         setSnackbar({
           open: true,
           message: 'You do not have permission to delete companies. Only admin users can perform this action.',
@@ -3341,7 +3293,7 @@ function AdminDashboard() {
       }
 
       // Check if current user is admin
-      if (currentUser.user_type !== 'admin') {
+      if (!authService.isAdmin(currentUser)) {
         setSnackbar({
           open: true,
           message: 'You do not have permission to delete posts. Only admin users can perform this action.',

@@ -8,9 +8,14 @@ logger = logging.getLogger(__name__)
 
 
 class UserSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
+
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'email']
+
+    def get_username(self, obj):
+        return getattr(obj, 'username', None) or obj.email
 
 
 class CompanyEventSerializer(serializers.ModelSerializer):

@@ -8,7 +8,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from .serializers import UserSerializer, UserRegistrationSerializer
 import uuid
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.pagination import PageNumberPagination
 import logging
 from django.utils import timezone
@@ -223,7 +223,7 @@ class UserProfileUpdateView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    parser_classes = (MultiPartParser, FormParser)
+    parser_classes = (JSONParser, MultiPartParser, FormParser)
 
     def get_object(self):
         return self.request.user
@@ -235,31 +235,6 @@ class UserProfileUpdateView(generics.RetrieveUpdateAPIView):
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def update(self, request, *args, **kwargs):
-        print('=== UserProfileUpdateView.update called ===')
-        print('Updating user ID:', self.get_object().id)
-        print('request.data:', request.data)
-        print('request.FILES:', request.FILES)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, files=request.FILES, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        print('User updated:', instance.id)
-        return Response(serializer.data)
-
-    def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
-
-    def perform_update(self, serializer):
-        serializer.save()
-
     def delete(self, request, *args, **kwargs):
         user = self.get_object()
         user.delete()
@@ -267,7 +242,7 @@ class UserProfileUpdateView(generics.RetrieveUpdateAPIView):
 
 class AdminPermission(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.user_type == 'admin'
+        return request.user.is_authenticated and request.user.is_platform_admin
 
 class UserPagination(PageNumberPagination):
     page_size = 10

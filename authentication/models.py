@@ -60,6 +60,10 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
+    @property
+    def is_platform_admin(self):
+        return self.is_superuser or self.is_staff or self.user_type == 'admin'
+
     class Meta:
         verbose_name = _('user')
-        verbose_name_plural = _('users') 
+        verbose_name_plural = _('users')

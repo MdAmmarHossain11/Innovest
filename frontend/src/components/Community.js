@@ -35,7 +35,6 @@ import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import EventIcon from '@mui/icons-material/Event';
 import SearchIcon from '@mui/icons-material/Search';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import EmojiEmotionsOutlinedIcon from '@mui/icons-material/EmojiEmotionsOutlined';
@@ -73,7 +72,7 @@ const CommunityImage = ({ attachment, alt }) => {
         component="img"
         src={imageUrl}
         alt={alt}
-        sx={{ display: 'block', width: '100%', maxHeight: 520, objectFit: 'contain' }}
+        sx={{ display: 'block', width: '100%', height: 'auto' }}
       />
     </Box>
   );
@@ -513,12 +512,6 @@ const Community = () => {
 
     requestAnimationFrame(measureTextHeights);
   }, [posts]);
-
-  const handleSearch = () => {
-    // The search is handled by the useEffect hook above
-    // This function is kept for backward compatibility with the search button
-    console.log('Search button clicked');
-  };
 
   const handlePostTypeChange = (event, newValue) => {
     console.log('Post type changed to:', newValue?.value);
@@ -1041,7 +1034,6 @@ const Community = () => {
             placeholder="Search by title or tags..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
             sx={{
               flex: 2,
               background: '#f7f9fb',
@@ -1071,7 +1063,6 @@ const Community = () => {
                     size="small"
                     onClick={() => {
                       setSearchQuery('');
-                      handleSearch();
                     }}
                     aria-label="Clear search"
                   >
@@ -1110,25 +1101,6 @@ const Community = () => {
               },
             }}
           />
-          <Button
-            variant="contained"
-            //startIcon={<FilterListIcon />}
-            startIcon={<SearchIcon />}
-            onClick={handleSearch}
-            sx={{
-              background: '#2d3e70',
-              color: '#fff',
-              borderRadius: 2,
-              px: 3,
-              fontWeight: 700,
-              boxShadow: 'none',
-              textTransform: 'none',
-              height: 40,
-              '&:hover': { background: '#1a2650' },
-            }}
-          >
-            Search
-          </Button>
         </Box>
       </Container>
 

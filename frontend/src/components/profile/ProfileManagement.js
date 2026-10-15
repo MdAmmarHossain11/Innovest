@@ -14,6 +14,7 @@ import {
   FormControl,
   InputLabel
 } from '@mui/material';
+import Alert from '@mui/material/Alert';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LinkIcon from '@mui/icons-material/Link';
@@ -30,8 +31,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
-const API_URL = `${API_HOST}/api/auth/profile/`;
 
 const states = [
   "Select One",
@@ -67,16 +66,19 @@ const ProfileManagement = () => {
       try {
         const user = authService.getCurrentUser();
         if (user && user.access) {
-          const res = await axios.get(API_URL, {
-            headers: { Authorization: `Bearer ${user.access}` }
-          });
-          setFormData({
-            ...formData,
-            ...res.data,
-            state: res.data.state || 'Select One',
-            profile_pic: res.data.profile_pic || null
-          });
-          setProfilePicUrl(res.data.profile_pic || '');
+          const profile = await authService.getProfile();
+          setFormData((currentData) => ({
+            ...currentData,
+            ...profile,
+            state: profile.state || 'Select One',
+            profile_pic: profile.profile_pic || null
+          }));
+          const profilePicture = profile.profile_pic || '';
+          setProfilePicUrl(
+            profilePicture && !/^https?:\/\//.test(profilePicture)
+              ? `${API_HOST}${profilePicture.startsWith('/') ? '' : '/'}${profilePicture}`
+              : profilePicture
+          );
         }
       } catch (err) {
         setError('Failed to fetch user info');
@@ -103,7 +105,6 @@ const ProfileManagement = () => {
     if (file) {
       setProfilePic(file);
       setProfilePicUrl(URL.createObjectURL(file));
-      setFormData(prev => ({ ...prev, profile_pic: file }));
     }
   };
 
@@ -113,24 +114,39 @@ const ProfileManagement = () => {
     try {
       const user = authService.getCurrentUser();
       if (!user || !user.access) throw new Error('Not authenticated');
-      const data = { ...formData };
-      let payload = data;
-      let config = { headers: { Authorization: `Bearer ${user.access}` } };
+      const profileFields = { ...formData };
+      delete profileFields.profile_pic;
+      let payload = profileFields;
       if (profilePic) {
         payload = new FormData();
-        Object.entries(data).forEach(([key, value]) => {
+        Object.entries(profileFields).forEach(([key, value]) => {
           if (value !== undefined && value !== null) payload.append(key, value);
         });
         payload.append('profile_pic', profilePic);
-        config.headers['Content-Type'] = 'multipart/form-data';
       }
-      console.log('Sending PATCH request:', payload);
-      await axios.patch(API_URL, payload, config);
+      const updatedProfile = await authService.updateProfile(payload);
+      const updatedPicture = updatedProfile.profile_pic || '';
+      setFormData((currentData) => ({
+        ...currentData,
+        ...updatedProfile,
+        state: updatedProfile.state || 'Select One',
+        profile_pic: updatedPicture || null
+      }));
+      setProfilePicUrl(
+        updatedPicture && !/^https?:\/\//.test(updatedPicture)
+          ? `${API_HOST}${updatedPicture.startsWith('/') ? '' : '/'}${updatedPicture}`
+          : updatedPicture
+      );
+      setProfilePic(null);
       setSaveStatus('success');
       setTimeout(() => setSaveStatus(''), 2000);
-      console.log('Profile updated successfully');
     } catch (err) {
-      setError('Failed to save changes');
+      setError(
+        err.response?.data?.detail ||
+        err.response?.data?.profile_pic?.[0] ||
+        err.message ||
+        'Failed to save changes'
+      );
       setSaveStatus('');
       console.error('Error updating profile:', err);
     }
@@ -155,6 +171,7 @@ const ProfileManagement = () => {
 
   const renderProfileContent = () => (
     <Box sx={{ p: { xs: 2, sm: 4 }, bgcolor: '#fff', borderRadius: 3 }}>
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
         <Avatar
           src={profilePicUrl}

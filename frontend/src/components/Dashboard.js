@@ -715,6 +715,7 @@ const Dashboard = () => {
 
       const data = await response.json();
       setUserProfile(data);
+      authService.updateCurrentUser(data);
 
       // Format the date fields before setting the form data
       const formattedData = {
@@ -726,7 +727,11 @@ const Dashboard = () => {
 
       // Set profile image URL with the correct path
       if (data.profile_pic) {
-        setProfileImageUrl(`${API_HOST}${data.profile_pic}`);
+        setProfileImageUrl(
+          /^https?:\/\//.test(data.profile_pic)
+            ? data.profile_pic
+            : `${API_HOST}${data.profile_pic.startsWith('/') ? '' : '/'}${data.profile_pic}`
+        );
       } else {
         setProfileImageUrl(null);
       }
@@ -997,7 +1002,7 @@ const Dashboard = () => {
       // Fetch all users (for search suggestions)
       const allUsersFetched = await chatService.getUsers();
       // Filter out admin users
-      const nonAdminUsers = allUsersFetched.filter(u => u.user_type !== 'admin');
+      const nonAdminUsers = allUsersFetched.filter(u => !authService.isAdmin(u));
       // Get deleted chat users from localStorage
       const deletedChatUsers = JSON.parse(localStorage.getItem('deletedChatUsers') || '[]');
       // Filter out deleted users from chat sidebar
@@ -1307,7 +1312,7 @@ const Dashboard = () => {
     // Filter all registered users, exclude admins
     const lower = value.toLowerCase();
     const suggestions = allUsers
-      .filter(u => u.user_type !== 'admin')
+      .filter(u => !authService.isAdmin(u))
       .filter(u =>
         (u.first_name && u.first_name.toLowerCase().includes(lower)) ||
         (u.last_name && u.last_name.toLowerCase().includes(lower)) ||
@@ -1317,7 +1322,7 @@ const Dashboard = () => {
   };
   const handleChatSuggestionClick = (user) => {
     // Prevent admin users from being added or selected
-    if (user.user_type === 'admin') return;
+    if (authService.isAdmin(user)) return;
     // Remove from deletedChatUsers if present
     const deletedChatUsers = JSON.parse(localStorage.getItem('deletedChatUsers') || '[]');
     if (deletedChatUsers.includes(user.id)) {
@@ -1841,8 +1846,13 @@ const Dashboard = () => {
 
       // Update profile image URL if changed
       if (data.profile_pic) {
-        setProfileImageUrl(`${API_HOST}${data.profile_pic}`);
+        setProfileImageUrl(
+          /^https?:\/\//.test(data.profile_pic)
+            ? data.profile_pic
+            : `${API_HOST}${data.profile_pic.startsWith('/') ? '' : '/'}${data.profile_pic}`
+        );
       }
+      authService.updateCurrentUser(data);
 
       // Reset profile image states
       setProfileImage(null);
@@ -3463,7 +3473,7 @@ const Dashboard = () => {
                         />
                         {chatSuggestions.length > 0 && (
                           <Paper sx={{ position: 'absolute', zIndex: 10, width: '90%', left: '5%', mt: '-8px', maxHeight: 200, overflowY: 'auto' }}>
-                            {chatSuggestions.filter(user => user.user_type !== 'admin').map(user => (
+                            {chatSuggestions.filter(user => !authService.isAdmin(user)).map(user => (
                               <Box
                                 key={user.id}
                                 sx={{ p: 1.5, cursor: 'pointer', '&:hover': { bgcolor: '#f0f4fa' }, display: 'flex', alignItems: 'center', gap: 2 }}
@@ -3541,7 +3551,7 @@ const Dashboard = () => {
                           </Box>
                         ) : (
                           chatUsers
-                            .filter(userItem => userItem.user_type !== 'admin')
+                            .filter(userItem => !authService.isAdmin(userItem))
                             .filter(userItem => {
                               const req = getRequestStatus(userItem.id);
                               if (chatFilter === 'accepted') {

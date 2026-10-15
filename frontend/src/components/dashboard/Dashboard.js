@@ -18,8 +18,7 @@ const Dashboard = () => {
       return;
     }
 
-    // Check if user is admin trying to access user dashboard
-    if (user.user_type === 'admin') {
+    if (authService.isAdmin(user)) {
       navigate('/admin-dashboard');
     }
   }, [navigate]);

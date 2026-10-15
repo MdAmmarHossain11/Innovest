@@ -1,8 +1,6 @@
 import React from 'react';
 import { Box, Container, Grid, Typography, Link, Divider } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const Footer = () => {
     return (
@@ -39,15 +37,6 @@ const Footer = () => {
                             }}>
                                 Start a Fundraise
                             </Link>
-                            <Link component={RouterLink} to="/investor-signup" sx={{ 
-                                color: '#9E9E9E', 
-                                textDecoration: 'none', 
-                                fontSize: '0.875rem',
-                                transition: 'color 0.2s ease',
-                                '&:hover': { color: '#fff' } 
-                            }}>
-                                Investor Signup
-                            </Link>
                             <Link component={RouterLink} to="/login" sx={{ 
                                 color: '#9E9E9E', 
                                 textDecoration: 'none', 
@@ -71,15 +60,6 @@ const Footer = () => {
                             BROWSE
                         </Typography>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                            <Link component={RouterLink} to="/trending" sx={{ 
-                                color: '#9E9E9E', 
-                                textDecoration: 'none', 
-                                fontSize: '0.875rem',
-                                transition: 'color 0.2s ease',
-                                '&:hover': { color: '#fff' } 
-                            }}>
-                                Trending
-                            </Link>
                             <Link component={RouterLink} to="/recently-funded" sx={{ 
                                 color: '#9E9E9E', 
                                 textDecoration: 'none', 
@@ -88,15 +68,6 @@ const Footer = () => {
                                 '&:hover': { color: '#fff' } 
                             }}>
                                 Recently Funded
-                            </Link>
-                            <Link component={RouterLink} to="/new-noteworthy" sx={{ 
-                                color: '#9E9E9E', 
-                                textDecoration: 'none', 
-                                fontSize: '0.875rem',
-                                transition: 'color 0.2s ease',
-                                '&:hover': { color: '#fff' } 
-                            }}>
-                                New & Noteworthy
                             </Link>
                         </Box>
                     </Grid>
@@ -170,35 +141,6 @@ const Footer = () => {
                                 '&:hover': { color: '#fff' } 
                             }}>
                                 Terms of Service
-                            </Link>
-                        </Box>
-                        {/* Social Media Links */}
-                        <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-                            <Link 
-                                href="https://twitter.com" 
-                                target="_blank" 
-                                sx={{ 
-                                    color: '#9E9E9E', 
-                                    transition: 'color 0.2s ease',
-                                    '&:hover': { color: '#fff' },
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <TwitterIcon sx={{ fontSize: 20 }} />
-                            </Link>
-                            <Link 
-                                href="https://linkedin.com" 
-                                target="_blank" 
-                                sx={{ 
-                                    color: '#9E9E9E', 
-                                    transition: 'color 0.2s ease',
-                                    '&:hover': { color: '#fff' },
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <LinkedInIcon sx={{ fontSize: 20 }} />
                             </Link>
                         </Box>
                     </Grid>

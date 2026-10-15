@@ -36,9 +36,16 @@ class UserProfileView(APIView):
             logger.info(f"Received data: {request.data}")
             
             # Log the current user data before update
-            logger.info(f"Current user data: {UserProfileSerializer(user).data}")
-            
-            serializer = UserProfileSerializer(user, data=request.data, partial=True)
+            logger.info(
+                "Current user data: %s",
+                UserProfileSerializer(user).data,
+            )
+
+            serializer = UserProfileSerializer(
+                user,
+                data=request.data,
+                partial=True,
+            )
             if serializer.is_valid():
                 logger.info("Serializer is valid, saving data")
                 serializer.save()

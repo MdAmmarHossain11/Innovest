@@ -353,7 +353,7 @@ function CompanyDetails({ id: propId, initialCompany = null, isDialog = false })
     const hasInvestmentAccess = Boolean(
         profileUser && (
             companyPermission === 'yes'
-            || profileUser.user_type === 'admin'
+            || authService.isAdmin(profileUser)
             || profileUser.id === company.user_id
         )
     );
@@ -555,7 +555,7 @@ function CompanyDetails({ id: propId, initialCompany = null, isDialog = false })
                                             )
                                         });
 
-                                        return (user && (companyPermission === 'yes' || user.user_type === 'admin' || user.id === company.user_id)) ? (
+                                        return (user && (companyPermission === 'yes' || authService.isAdmin(user) || user.id === company.user_id)) ? (
                                             <Box>
                                                 <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, mb: 4 }}>
                                                     Business Plan
@@ -911,7 +911,7 @@ function CompanyDetails({ id: propId, initialCompany = null, isDialog = false })
                                 {/* Investment Card */}
                                 {(() => {
                                     const user = authService.getCurrentUser();
-                                    return (user && (companyPermission === 'yes' || user.user_type === 'admin' || user.id === company.user_id)) ? (
+                                    return (user && (companyPermission === 'yes' || authService.isAdmin(user) || user.id === company.user_id)) ? (
                                         <Card
                                             elevation={3}
                                             sx={{
@@ -1099,7 +1099,7 @@ function CompanyDetails({ id: propId, initialCompany = null, isDialog = false })
                                                         )}
                                                     </tbody>
                                                 </Box>
-                                                {user && user.user_type !== 'admin' && user.id !== company.user_id && !userHasPaidPayment && (
+                                                {user && !authService.isAdmin(user) && user.id !== company.user_id && !userHasPaidPayment && (
                                                     <Button
                                                         variant="contained"
                                                         color="primary"
