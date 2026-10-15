@@ -163,7 +163,13 @@ const ResetPassword = () => {
             setSuccess(response.message);
             setTimeout(() => navigate('/login'), 3000);
         } catch (err) {
-            setError(err.response?.data?.error || 'An error occurred. Please try again.');
+            setError(
+                err.error ||
+                err.detail ||
+                err.password?.join(' ') ||
+                err.message ||
+                'Unable to reset the password. Please try again.'
+            );
         } finally {
             setLoading(false);
         }

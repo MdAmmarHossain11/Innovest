@@ -1,5 +1,10 @@
+from io import BytesIO
+from tempfile import TemporaryDirectory
+
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, override_settings
+from PIL import Image
 from rest_framework.test import APIClient
 
 from .models import CommunityPostNotification
@@ -37,6 +42,7 @@ class CommunityPostNotificationsTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['user']['username'], self.author.email)
         post_id = response.data['id']
         notification = CommunityPostNotification.objects.get(
             recipient=self.recipient,
@@ -88,3 +94,37 @@ class CommunityPostNotificationsTests(TestCase):
                 post_id=response.data['id'],
             ).exists()
         )
+
+    def test_public_post_image_is_stored_and_served(self):
+        image_bytes = BytesIO()
+        Image.new('RGB', (5, 4), color='purple').save(image_bytes, format='PNG')
+        image = SimpleUploadedFile(
+            'community.png',
+            image_bytes.getvalue(),
+            content_type='image/png',
+        )
+
+        with TemporaryDirectory() as media_root, override_settings(
+            MEDIA_ROOT=media_root,
+            DEBUG=False,
+        ):
+            response = self.author_client.post(
+                '/api/community/posts/',
+                {
+                    'title': 'Photo post',
+                    'type': 'Discussion',
+                    'visibility': 'public',
+                    'description': 'Post with an image',
+                    'attachment': image,
+                },
+                format='multipart',
+            )
+
+            self.assertEqual(response.status_code, 201, response.data)
+            self.assertEqual(response.data['user']['username'], self.author.email)
+            image_path = response.data['attachment'].split('/media/', 1)[1]
+            image_response = APIClient().get(f'/media/{image_path}')
+            image_response.close()
+
+        self.assertEqual(image_response.status_code, 200)
+        self.assertEqual(image_response['Content-Type'], 'image/png')

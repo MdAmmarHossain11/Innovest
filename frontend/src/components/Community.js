@@ -1,4 +1,4 @@
-import { API_HOST } from '../config';
+import { API_HOST, getMediaUrl } from '../config';
 import React, { useState, useEffect, useRef, memo } from 'react';
 import {
   Box,
@@ -60,12 +60,9 @@ const CustomSendIcon = (props) => (
 );
 
 const CommunityImage = ({ attachment, alt }) => {
-  let imageUrl = typeof attachment === 'string' ? attachment : attachment?.url;
+  const attachmentUrl = typeof attachment === 'string' ? attachment : attachment?.url;
+  const imageUrl = getMediaUrl(attachmentUrl);
   if (!imageUrl) return null;
-  if (!/^https?:\/\//.test(imageUrl)) {
-    imageUrl = imageUrl.replace(/^\/media[\\/]?/, '');
-    imageUrl = `${API_HOST}/media/${imageUrl}`;
-  }
   return (
     <Box sx={{ mt: 2, borderRadius: 2, overflow: 'hidden', bgcolor: '#f5f7fa' }}>
       <Box
@@ -148,7 +145,7 @@ const MemoizedCommentItem = memo(function CommentItem({ comment, postId, level =
       )}
       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
         <Avatar
-          src={comment.user?.profile_picture || comment.user?.profile_pic || 'https://placehold.co/40x40'}
+          src={getMediaUrl(comment.user?.profile_picture || comment.user?.profile_pic) || 'https://placehold.co/40x40'}
           alt={comment.user?.first_name ? `${comment.user.first_name} ${comment.user.last_name || ''}`.trim() : 'User'}
           sx={{ width: 38, height: 38, mt: 0.5, border: '2px solid #e3e8ef', boxShadow: 1, zIndex: 3 }}
           onError={e => { e.target.onerror = null; e.target.src = 'https://placehold.co/40x40'; }}
@@ -348,7 +345,7 @@ const Community = () => {
           usersMap[user.id] = {
             id: user.id,
             name: `${user.first_name} ${user.last_name}`.trim() || user.email,
-            avatar: user.profile_picture || 'https://placehold.co/40x40',
+            avatar: getMediaUrl(user.profile_picture || user.profile_pic) || 'https://placehold.co/40x40',
             ...user
           };
         }
@@ -358,7 +355,7 @@ const Community = () => {
           usersMap[user.id] = {
             id: user.id,
             name: `${user.first_name} ${user.last_name}`.trim() || user.email,
-            avatar: user.profile_picture || 'https://placehold.co/40x40',
+            avatar: getMediaUrl(user.profile_picture || user.profile_pic) || 'https://placehold.co/40x40',
             ...user
           };
         });
@@ -581,7 +578,7 @@ const Community = () => {
         first_name: currentUser.first_name,
         last_name: currentUser.last_name,
         username: currentUser.username,
-        profile_picture: currentUser.profile_picture || currentUser.profile_pic || 'https://placehold.co/40x40',
+        profile_picture: getMediaUrl(currentUser.profile_picture || currentUser.profile_pic) || 'https://placehold.co/40x40',
       },
       content: text,
       created_at: new Date().toISOString(),
@@ -1176,7 +1173,7 @@ const Community = () => {
                     name: post.user.first_name && post.user.last_name
                       ? `${post.user.first_name} ${post.user.last_name}`
                       : post.user.username || 'Unknown User',
-                    avatar: post.user.profile_picture || 'https://placehold.co/40x40'
+                    avatar: getMediaUrl(post.user.profile_picture || post.user.profile_pic) || 'https://placehold.co/40x40'
                   };
                 } else {
                   // If post.user is just an ID, use the users map
@@ -1725,7 +1722,7 @@ const Community = () => {
                         name: selectedPost.user.first_name && selectedPost.user.last_name
                           ? `${selectedPost.user.first_name} ${selectedPost.user.last_name}`
                           : selectedPost.user.username || 'Unknown User',
-                        avatar: selectedPost.user.profile_picture || 'https://placehold.co/40x40'
+                        avatar: getMediaUrl(selectedPost.user.profile_picture || selectedPost.user.profile_pic) || 'https://placehold.co/40x40'
                       };
                     } else {
                       // If selectedPost.user is just an ID, use the users map
@@ -1876,7 +1873,7 @@ const Community = () => {
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5, bgcolor: '#f8faff', p: 2, borderRadius: 2, border: '1px solid #e3e8ef', boxShadow: 1 }}>
                   <Avatar
-                    src={currentUser?.profile_picture || (currentUser?.profile_pic ? `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}${currentUser.profile_pic}` : 'https://placehold.co/40x40')}
+                    src={getMediaUrl(currentUser?.profile_picture || currentUser?.profile_pic) || 'https://placehold.co/40x40'}
                     alt={`${currentUser?.first_name || 'User'}`}
                     sx={{ width: 40, height: 40 }}
                     onError={e => { e.target.onerror = null; e.target.src = 'https://placehold.co/40x40'; }}

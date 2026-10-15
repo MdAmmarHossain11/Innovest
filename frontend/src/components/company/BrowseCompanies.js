@@ -1,4 +1,4 @@
-import { API_HOST } from '../../config';
+import { API_HOST, getMediaUrl } from '../../config';
 import React, { useState, useEffect } from 'react';
 import {
     Container,
@@ -611,7 +611,7 @@ const BrowseCompanies = () => {
                                                 <CardMedia
                                                     component="img"
                                                     height="120"
-                                                    image={company.cover_image}
+                                                    image={getMediaUrl(company.cover_image)}
                                                     alt={company.product_name}
                                                     sx={{ objectFit: 'cover', width: '100%', height: '100%' }}
                                                 />

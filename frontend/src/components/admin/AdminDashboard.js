@@ -1,4 +1,4 @@
-import { API_HOST } from '../../config';
+import { API_HOST, getMediaUrl } from '../../config';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
@@ -902,7 +902,7 @@ function AdminDashboard() {
 
         // Set profile image URL if it exists
         if (userData.profile_pic) {
-          setProfileImageUrl(`${API_HOST}${userData.profile_pic}`);
+          setProfileImageUrl(getMediaUrl(userData.profile_pic));
         }
       }
     } catch (error) {
@@ -3080,10 +3080,14 @@ function AdminDashboard() {
       });
     } catch (error) {
       console.error('Error changing password:', error);
-      setPasswordError(error.response?.data?.detail || 'Failed to change password');
+      const responseData = error.response?.data;
+      const passwordError = Array.isArray(responseData?.new_password)
+        ? responseData.new_password.join(' ')
+        : responseData?.new_password;
+      setPasswordError(passwordError || responseData?.detail || 'Failed to change password');
       setSnackbar({
         open: true,
-        message: error.response?.data?.detail || 'Failed to change password',
+        message: passwordError || responseData?.detail || 'Failed to change password',
         severity: 'error'
       });
     } finally {
@@ -3928,10 +3932,7 @@ function AdminDashboard() {
                                       });
 
                                       const profilePic = user.profile_picture || user.profile_pic;
-                                      const fullUrl = profilePic ?
-                                        (profilePic.startsWith('http') ? profilePic :
-                                          `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}${profilePic}`) :
-                                        null;
+                                      const fullUrl = getMediaUrl(profilePic) || null;
 
                                       return fullUrl ? (
                                         <Avatar
@@ -4147,13 +4148,6 @@ function AdminDashboard() {
                                 </TableCell>
                                 <TableCell>
                                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    {company.logo && (
-                                      <Avatar
-                                        src={company.logo || `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/media/company_covers/default_company_cover.jpg`}
-                                        alt={company.name}
-                                        sx={{ mr: 2, width: 40, height: 40 }}
-                                      />
-                                    )}
                                     <Box>
                                       <Typography variant="subtitle2">
                                         {company.name}
@@ -4451,16 +4445,12 @@ function AdminDashboard() {
                                 <TableCell>
                                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                                     <Avatar
-                                      src={event.cover_image
-                                        ? (event.cover_image.startsWith('http')
-                                          ? event.cover_image
-                                          : `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}${event.cover_image}`)
-                                        : `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/media/event_images/default_event_cover.jpg`}
+                                      src={getMediaUrl(event.cover_image || 'event_images/default_event_cover.jpg')}
                                       alt={event.title}
                                       sx={{ width: 40, height: 40 }}
                                       onError={(e) => {
                                         e.target.onerror = null;
-                                        e.target.src = `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/media/event_images/default_event_cover.jpg`;
+                                        e.target.src = getMediaUrl('event_images/default_event_cover.jpg');
                                       }}
                                     />
                                     <Box>

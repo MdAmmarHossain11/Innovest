@@ -20,6 +20,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import companyService from '../../services/companyService';
+import { getMediaUrl } from '../../config';
 
 const FeaturedCompanies = () => {
   const theme = useTheme();
@@ -145,14 +146,13 @@ const FeaturedCompanies = () => {
                     <CardMedia
                       component="img"
                       height="110"
-                      image={
-                        company.cover_image ||
-                        `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/media/company_covers/default_company_cover.jpg`
-                      }
+                      image={getMediaUrl(
+                        company.cover_image || 'company_covers/default_company_cover.jpg'
+                      )}
                       alt={company.product_name}
                       onError={(e) => {
                         e.target.onerror = null; // Prevent infinite loop if default image fails
-                        e.target.src = `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/media/company_covers/default_company_cover.jpg`;
+                        e.target.src = getMediaUrl('company_covers/default_company_cover.jpg');
                       }}
                       sx={{
                         objectFit: 'cover',

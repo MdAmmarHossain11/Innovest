@@ -1,4 +1,4 @@
-import { API_HOST } from '../../config';
+import { API_HOST, getMediaUrl } from '../../config';
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -74,11 +74,7 @@ const ProfileManagement = () => {
             profile_pic: profile.profile_pic || null
           }));
           const profilePicture = profile.profile_pic || '';
-          setProfilePicUrl(
-            profilePicture && !/^https?:\/\//.test(profilePicture)
-              ? `${API_HOST}${profilePicture.startsWith('/') ? '' : '/'}${profilePicture}`
-              : profilePicture
-          );
+          setProfilePicUrl(getMediaUrl(profilePicture));
         }
       } catch (err) {
         setError('Failed to fetch user info');
@@ -132,11 +128,7 @@ const ProfileManagement = () => {
         state: updatedProfile.state || 'Select One',
         profile_pic: updatedPicture || null
       }));
-      setProfilePicUrl(
-        updatedPicture && !/^https?:\/\//.test(updatedPicture)
-          ? `${API_HOST}${updatedPicture.startsWith('/') ? '' : '/'}${updatedPicture}`
-          : updatedPicture
-      );
+      setProfilePicUrl(getMediaUrl(updatedPicture));
       setProfilePic(null);
       setSaveStatus('success');
       setTimeout(() => setSaveStatus(''), 2000);

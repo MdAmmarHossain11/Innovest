@@ -63,15 +63,16 @@ database availability are not guaranteed.
    Cloudflare R2 using `AWS_STORAGE_BUCKET_NAME`, `AWS_S3_ENDPOINT_URL`,
    `AWS_S3_REGION_NAME`, `AWS_ACCESS_KEY_ID`, and `AWS_SECRET_ACCESS_KEY` in
    Render's secret settings. Never put credentials in this repository.
-6. Configure SMTP in Render before accepting registrations: set
+6. Configure email delivery in Render before accepting registrations. The
+   preferred option is Resend's HTTPS API: set `RESEND_API_KEY` and
+   `DEFAULT_FROM_EMAIL` to an address on a verified sending domain. The
+   application automatically uses Resend when the API key is present. Render's
+   free web services may not be able to send through SMTP; SMTP remains
+   available by setting `EMAIL_BACKEND`,
    `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, and `DEFAULT_FROM_EMAIL`.
-   `EMAIL_HOST` defaults to `smtp.gmail.com`, with port `587` and TLS enabled;
-   override `EMAIL_HOST`, `EMAIL_PORT`, and `EMAIL_USE_TLS` for another provider.
-   For Gmail, use a Google App Password, not the account password. Add secrets
-   in the Render dashboard only; never commit them. Registration requires a
-   verification email, and accounts remain pending until the verification link
-   is used. If sending fails, the pending account is retained so registration
-   can be retried after SMTP is configured.
+   Add credentials in the Render dashboard only; never commit them.
+   Registration requires email verification, and pending accounts can request
+   another verification message by submitting the same email again.
 7. Configure SSLCommerz credentials in Render only if payment features are
    needed. The application defaults to payment sandbox mode.
 
@@ -119,6 +120,11 @@ and can pause after a week without activity. Keep a separate backup of important
 data and review provider limits before using this demo with real users or
 documents. Free-plan URLs remain provider-managed and are not a service-level
 guarantee of permanent availability.
+Uploaded profile, community, and company images are publicly served from the
+API's `/media/` path when using local storage. Local uploads on Render are
+ephemeral; configure all listed R2 variables for durable image and file
+storage. The storage bucket must permit the configured signed URLs to be read.
+
 If Render reports an HTTP health-check timeout, review the service's **Logs**
 around the alert timestamp for worker timeouts, database connection failures,
 or restarts. The health endpoint is `/api/health/`; the Render start command

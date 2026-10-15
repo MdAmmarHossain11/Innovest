@@ -11,7 +11,6 @@ import ForgotPassword from './components/auth/ForgotPassword';
 import ResetPassword from './components/auth/ResetPassword';
 import Layout from './components/shared/Layout';
 import Home from './components/Home';
-import CompanyProfile from './components/company/CompanyProfile';
 import Contact from './components/Contact';
 import Faq from './components/Faq';
 import HelpCenter from './components/HelpCenter';
@@ -31,7 +30,6 @@ import PaymentSuccess from './components/payment/PaymentSuccess';
 import EmailForm from './EmailForm';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsAndConditions from './components/TermsAndConditions';
-import CompanyView from './components/company/CompanyView';
 
 function App() {
   return (
@@ -42,7 +40,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/company/:id" element={<CompanyProfile />} />
+        <Route path="/company/:id" element={<CompanyDetails />} />
         <Route path="/browse-companies" element={<BrowseCompanies />} />
         <Route path="/about" element={<About />} />
         <Route path="/community" element={<Community />} />

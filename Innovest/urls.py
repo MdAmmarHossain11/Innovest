@@ -1,8 +1,11 @@
+import os
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
+from django.views.static import serve
 from rest_framework import routers
 from backend.views import (
     CompanyBusinessPlanViewSet,
@@ -22,9 +25,32 @@ def health_check(request):
     return JsonResponse({'status': 'ok'})
 
 
+def public_uploaded_image(request, path):
+    allowed_directories = {
+        'profile_pics',
+        'profile_pictures',
+        'community_attachments',
+        'company_covers',
+        'company_logos',
+        'company_slides',
+    }
+    allowed_extensions = {'.avif', '.gif', '.jpeg', '.jpg', '.png', '.webp'}
+    normalized_path = path.replace('\\', '/')
+    path_parts = normalized_path.split('/')
+    if (
+        len(path_parts) < 2
+        or path_parts[0] not in allowed_directories
+        or any(part in {'', '.', '..'} for part in path_parts)
+        or os.path.splitext(normalized_path)[1].lower() not in allowed_extensions
+    ):
+        raise Http404
+    return serve(request, normalized_path, document_root=settings.MEDIA_ROOT)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/health/', health_check, name='health-check'),
+    path('media/<path:path>', public_uploaded_image, name='public-uploaded-image'),
     path('api/', include(router.urls)),
     path('api/payments/', include('payments.urls')),
     path('api/', include('companies.urls')),

@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -19,8 +21,24 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password'] != data['password2']:
-            raise serializers.ValidationError("Passwords don't match")
+            raise serializers.ValidationError({
+                'password2': "Passwords don't match"
+            })
+        try:
+            validate_password(data['password'])
+        except ValidationError as error:
+            raise serializers.ValidationError({
+                'password': error.messages
+            }) from error
         return data
+
+    def validate_email(self, value):
+        email = value.strip().lower()
+        if User.objects.filter(email__iexact=email).exists():
+            raise serializers.ValidationError(
+                'An account with this email address already exists.'
+            )
+        return email
 
     def create(self, validated_data):
         validated_data.pop('password2')

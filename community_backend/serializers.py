@@ -40,7 +40,7 @@ class CommunityPostSerializer(serializers.ModelSerializer):
 
             return {
                 'id': obj.user.id,
-                'username': obj.user.username,
+                'username': obj.user.email,
                 'first_name': obj.user.first_name,
                 'last_name': obj.user.last_name,
                 'profile_picture': profile_picture_url
@@ -78,7 +78,7 @@ class CommunityCommentSerializer(serializers.ModelSerializer):
 
         return {
             'id': obj.user.id,
-            'username': obj.user.username,
+            'username': obj.user.email,
             'first_name': obj.user.first_name,
             'last_name': obj.user.last_name,
             'profile_picture': profile_picture_url

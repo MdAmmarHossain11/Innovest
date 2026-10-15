@@ -2,10 +2,12 @@ from rest_framework import status, views, generics, permissions, filters
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
+from django.core import signing
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.conf import settings
-from django.template.loader import render_to_string
 from .serializers import UserSerializer, UserRegistrationSerializer
 import uuid
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
@@ -16,6 +18,8 @@ from django.utils import timezone
 logger = logging.getLogger(__name__)
 
 User = get_user_model()
+PASSWORD_RESET_SALT = 'authentication.password-reset'
+PASSWORD_RESET_MAX_AGE = 60 * 60
 
 
 def send_verification_email(user):
@@ -29,11 +33,22 @@ def send_verification_email(user):
     )
 
 
+def send_password_reset_email(user, token):
+    reset_url = f"{settings.FRONTEND_URL}/reset-password/{token}"
+    send_mail(
+        'Password Reset Request',
+        f'Click the following link to reset your password: {reset_url}',
+        settings.DEFAULT_FROM_EMAIL,
+        [user.email],
+        fail_silently=False,
+    )
+
+
 class RegisterView(views.APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        email = request.data.get('email', '').strip().lower()
+        email = str(request.data.get('email', '')).strip().lower()
         existing_user = User.objects.filter(email__iexact=email).first()
 
         if existing_user and not existing_user.email_verified:
@@ -50,6 +65,10 @@ class RegisterView(views.APIView):
             return Response({
                 'message': 'A new verification link has been sent to your email address.'
             }, status=status.HTTP_200_OK)
+        if existing_user:
+            return Response({
+                'email': ['An account with this email address already exists.']
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
@@ -69,7 +88,6 @@ class RegisterView(views.APIView):
             return Response({
                 'message': 'Registration successful. Please check your email to verify your account.'
             }, status=status.HTTP_201_CREATED)
-        print('Serializer errors:', serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VerifyEmailView(views.APIView):
@@ -97,128 +115,104 @@ class LoginView(views.APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        email = request.data.get('email')
+        email = str(request.data.get('email', '')).strip().lower()
         password = request.data.get('password')
 
-        print(f"Login attempt with email: {email}")
-        
         if not email or not password:
-            print("Missing email or password")
             return Response({
                 'error': 'Email and password are required.'
             }, status=status.HTTP_400_BAD_REQUEST)
-            
-        try:
-            # Find user by email
-            try:
-                user = User.objects.get(email=email)
-                print(f"Found user: {user.email}")
-                
-                # Check if user is active and verified
-                if not user.is_active:
-                    return Response({
-                        'error': 'Account is not active. Please verify your email.'
-                    }, status=status.HTTP_400_BAD_REQUEST)
-                
-                # Check if email is verified
-                if not user.email_verified:
-                    return Response({
-                        'error': 'Please verify your email before logging in.'
-                    }, status=status.HTTP_400_BAD_REQUEST)
-                
-                # Verify password
-                if not user.check_password(password):
-                    return Response({
-                        'error': 'Invalid email or password.'
-                    }, status=status.HTTP_400_BAD_REQUEST)
-                
-                # Generate tokens
-                refresh = RefreshToken.for_user(user)
-                print(f"Login successful")
-                
-                return Response({
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
-                    'user': UserSerializer(user).data
-                }, status=status.HTTP_200_OK)
-                
-            except User.DoesNotExist:
-                print(f"No user found with email: {email}")
-                return Response({
-                    'error': 'Invalid email or password.'
-                }, status=status.HTTP_400_BAD_REQUEST)
-            
-        except Exception as e:
-            import traceback
-            print(f"Login error: {str(e)}")
-            print(f"Traceback: {traceback.format_exc()}")
+
+        user = User.objects.filter(email__iexact=email).first()
+        if not user or not user.check_password(password):
             return Response({
-                'error': 'An error occurred during login. Please try again.'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                'error': 'Invalid email or password.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if not user.is_active:
+            return Response({
+                'error': 'Your account is inactive. Please contact support.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if not user.email_verified:
+            return Response({
+                'error': 'Please verify your email before logging in.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'user': UserSerializer(user).data
+        }, status=status.HTTP_200_OK)
 
 class ForgotPasswordView(views.APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        email = request.data.get('email')
-        try:
-            user = User.objects.get(email=email)
-            # Generate reset token
-            reset_token = str(uuid.uuid4())
-            user.reset_token = reset_token
-            user.save()
-
-            # Send reset email
-            reset_url = f"http://localhost:3000/reset-password/{reset_token}"
-            subject = 'Password Reset Request'
-            message = f'Click the following link to reset your password: {reset_url}'
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                [user.email],
-                fail_silently=False,
-            )
+        email = str(request.data.get('email', '')).strip().lower()
+        user = User.objects.filter(email__iexact=email).first()
+        if not user:
             return Response({
-                'message': 'Password reset link has been sent to your email.'
+                'message': 'If an account exists for that email, a password reset link will be sent.'
             }, status=status.HTTP_200_OK)
-        except User.DoesNotExist:
+
+        reset_nonce = uuid.uuid4()
+        signed_token = signing.dumps(str(reset_nonce), salt=PASSWORD_RESET_SALT)
+        user.reset_token = reset_nonce
+        user.save(update_fields=['reset_token'])
+        try:
+            send_password_reset_email(user, signed_token)
+        except Exception:
+            user.reset_token = None
+            user.save(update_fields=['reset_token'])
+            logger.exception('Unable to send password reset email.')
             return Response({
-                'error': 'No user found with this email address.'
-            }, status=status.HTTP_400_BAD_REQUEST)
+                'error': 'Unable to send the password reset email. Please try again later.'
+            }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+        return Response({
+            'message': 'If an account exists for that email, a password reset link will be sent.'
+        }, status=status.HTTP_200_OK)
 
 class ResetPasswordView(views.APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, token):
-        print(f"Reset password attempt with token: {token}")
-        print(f"Request data: {request.data}")
         try:
-            user = User.objects.get(reset_token=token)
-            print(f"Found user: {user.email}")
-            password = request.data.get('password')
-            password2 = request.data.get('password2')
-
-            if password != password2:
-                print("Passwords do not match")
-                return Response({
-                    'error': 'Passwords do not match.'
-                }, status=status.HTTP_400_BAD_REQUEST)
-
-            user.set_password(password)
-            user.reset_token = None
-            user.save()
-            print(f"Successfully reset password for user: {user.email}")
-
-            return Response({
-                'message': 'Password has been reset successfully.'
-            }, status=status.HTTP_200_OK)
-        except User.DoesNotExist:
-            print(f"No user found with reset token: {token}")
+            reset_nonce = signing.loads(
+                token,
+                salt=PASSWORD_RESET_SALT,
+                max_age=PASSWORD_RESET_MAX_AGE,
+            )
+        except (signing.BadSignature, signing.SignatureExpired):
             return Response({
                 'error': 'Invalid or expired reset token.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        user = User.objects.filter(reset_token=reset_nonce).first()
+        if not user:
+            return Response({
+                'error': 'Invalid or expired reset token.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        password = request.data.get('password')
+        password2 = request.data.get('password2')
+        if not password or password != password2:
+            return Response({
+                'error': 'Passwords do not match or are missing.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            validate_password(password, user)
+        except ValidationError as error:
+            return Response({
+                'password': error.messages
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(password)
+        user.reset_token = None
+        user.save()
+        return Response({
+            'message': 'Password has been reset successfully.'
+        }, status=status.HTTP_200_OK)
 class UserProfileUpdateView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer

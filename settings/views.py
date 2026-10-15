@@ -3,9 +3,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.password_validation import validate_password
 from authentication.models import CustomUser
+from django.core.exceptions import ValidationError
 from .serializers import UserProfileSerializer
-from django.contrib.auth.hashers import check_password
 import logging
 import traceback
 
@@ -85,7 +86,7 @@ class ChangePasswordView(APIView):
                 )
 
             # Check if old password matches
-            if not check_password(old_password, user.password):
+            if not user.check_password(old_password):
                 return Response(
                     {"detail": "Old password is incorrect"},
                     status=status.HTTP_400_BAD_REQUEST
@@ -98,8 +99,16 @@ class ChangePasswordView(APIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Update password
+            try:
+                validate_password(new_password, user)
+            except ValidationError as error:
+                return Response(
+                    {"new_password": error.messages},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
             user.set_password(new_password)
+            user.reset_token = None
             user.save()
 
             return Response(

@@ -192,6 +192,11 @@ const Register = () => {
                 }
             } else if (err.response?.data?.errors) {
                 setValidationErrors(err.response.data.errors);
+            } else if (err.password || err.password2) {
+                setValidationErrors({
+                    password: Array.isArray(err.password) ? err.password.join(' ') : err.password,
+                    password2: Array.isArray(err.password2) ? err.password2.join(' ') : err.password2
+                });
             } else if (err.error) {
                 setError(err.error);
             } else if (typeof err.detail === 'string') {

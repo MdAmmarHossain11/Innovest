@@ -31,10 +31,10 @@ const ForgotPassword = () => {
         setLoading(true);
 
         try {
-            const response = await authService.forgotPassword(email);
+            const response = await authService.forgotPassword(email.trim());
             setSuccess(response.message);
         } catch (err) {
-            setError(err.response?.data?.error || 'An error occurred. Please try again.');
+            setError(err.error || err.detail || err.message || 'Unable to send the password reset email. Please try again later.');
         } finally {
             setLoading(false);
         }

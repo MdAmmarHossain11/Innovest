@@ -79,8 +79,7 @@ const getCompanyById = async (id) => {
         console.log(`Fetching company with ID: ${id}`);
         //const response = await axiosInstance.get(`companies/${id}/`);
 
-        // Use my-companies endpoint to get company details regardless of status
-        const response = await axiosInstance.get(`my-companies/${id}/`);
+        const response = await axiosInstance.get(`companies/${id}/`);
         console.log('Raw API Response:', response);
         console.log('Response Data:', response.data);
         console.log('Response Status:', response.status);

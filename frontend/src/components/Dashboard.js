@@ -1,4 +1,4 @@
-import { API_HOST } from '../config';
+import { API_HOST, getMediaUrl } from '../config';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
@@ -726,15 +726,7 @@ const Dashboard = () => {
       setSettingsFormData(formattedData);
 
       // Set profile image URL with the correct path
-      if (data.profile_pic) {
-        setProfileImageUrl(
-          /^https?:\/\//.test(data.profile_pic)
-            ? data.profile_pic
-            : `${API_HOST}${data.profile_pic.startsWith('/') ? '' : '/'}${data.profile_pic}`
-        );
-      } else {
-        setProfileImageUrl(null);
-      }
+      setProfileImageUrl(getMediaUrl(data.profile_pic) || null);
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
@@ -1767,7 +1759,10 @@ const Dashboard = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.detail || 'Error changing password');
+        const passwordErrors = Array.isArray(data.new_password)
+          ? data.new_password.join(' ')
+          : data.new_password;
+        throw new Error(passwordErrors || data.detail || 'Error changing password');
       }
 
       setSettingsSnackbar({
@@ -1846,11 +1841,7 @@ const Dashboard = () => {
 
       // Update profile image URL if changed
       if (data.profile_pic) {
-        setProfileImageUrl(
-          /^https?:\/\//.test(data.profile_pic)
-            ? data.profile_pic
-            : `${API_HOST}${data.profile_pic.startsWith('/') ? '' : '/'}${data.profile_pic}`
-        );
+        setProfileImageUrl(getMediaUrl(data.profile_pic));
       }
       authService.updateCurrentUser(data);
 
@@ -2913,11 +2904,11 @@ const Dashboard = () => {
                               <CardMedia
                                 component="img"
                                 sx={{ width: 200, height: 140 }}
-                                image={company.cover_image || `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/media/company_covers/default_company_cover.jpg`}
+                                image={getMediaUrl(company.cover_image || 'company_covers/default_company_cover.jpg')}
                                 alt={company.product_name}
                                 onError={(e) => {
                                   e.target.onerror = null;
-                                  e.target.src = `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/media/company_covers/default_company_cover.jpg`;
+                                  e.target.src = getMediaUrl('company_covers/default_company_cover.jpg');
                                 }}
                               />
                               <CardContent sx={{ flex: 1 }}>
@@ -3088,11 +3079,11 @@ const Dashboard = () => {
                                 <CardMedia
                                   component="img"
                                   sx={{ width: 200, height: 140 }}
-                                  image={company.cover_image || `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/media/company_covers/default_company_cover.jpg`}
+                                  image={getMediaUrl(company.cover_image || 'company_covers/default_company_cover.jpg')}
                                   alt={company.product_name}
                                   onError={(e) => {
                                     e.target.onerror = null; // Prevent infinite loop if default image fails
-                                    e.target.src = `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/media/company_covers/default_company_cover.jpg`;
+                                    e.target.src = getMediaUrl('company_covers/default_company_cover.jpg');
                                   }}
                                 />
                                 <CardContent sx={{ flex: 1 }}>
@@ -3481,7 +3472,7 @@ const Dashboard = () => {
                               >
                                 <Avatar
                                   sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: '1rem' }}
-                                  src={user.profile_pic ? `${API_HOST}${user.profile_pic}` : undefined}
+                                  src={getMediaUrl(user.profile_pic) || undefined}
                                 >
                                   {(!user.profile_pic && (user.first_name ? user.first_name[0].toUpperCase() : user.email[0].toUpperCase()))}
                                 </Avatar>
@@ -3585,7 +3576,7 @@ const Dashboard = () => {
                                         bgcolor: 'primary.main',
                                         fontSize: '1rem'
                                       }}
-                                      src={userItem.profile_pic ? `${API_HOST}${userItem.profile_pic}` : undefined}
+                                      src={getMediaUrl(userItem.profile_pic) || undefined}
                                     >
                                       {(!userItem.profile_pic && (userItem.first_name ? userItem.first_name[0].toUpperCase() : userItem.email[0].toUpperCase()))}
                                     </Avatar>
@@ -3664,7 +3655,7 @@ const Dashboard = () => {
                                 bgcolor: 'primary.main',
                                 fontSize: '1rem'
                               }}
-                              src={selectedChat.profile_pic ? `${API_HOST}${selectedChat.profile_pic}` : undefined}
+                              src={getMediaUrl(selectedChat.profile_pic) || undefined}
                             >
                               {(!selectedChat.profile_pic && (selectedChat.first_name ? selectedChat.first_name[0].toUpperCase() : selectedChat.email[0].toUpperCase()))}
                             </Avatar>
@@ -3778,7 +3769,7 @@ const Dashboard = () => {
                                               mr: 1,
                                               flexShrink: 0
                                             }}
-                                            src={msg.sender_profile_pic ? `${API_HOST}${msg.sender_profile_pic}` : undefined}
+                                            src={getMediaUrl(msg.sender_profile_pic) || undefined}
                                             alt={selectedChat.first_name ? selectedChat.first_name[0].toUpperCase() : selectedChat.email[0].toUpperCase()}
                                           />
                                         )}

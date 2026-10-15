@@ -42,6 +42,7 @@ import {
 import companyService from '../../services/companyService';
 import authService from '../../services/authService';
 import companyPermissionService from '../../services/companyPermissionService';
+import { getMediaUrl } from '../../config';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -130,8 +131,7 @@ function CompanyDetails() {
             slideImages = [];
         }
     }
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-    const slideImageUrls = slideImages.map(img => `${API_URL}/media/company_slides/${img}`);
+    const slideImageUrls = slideImages.map(img => getMediaUrl(`company_slides/${img}`));
     const slides = slideImageUrls.length > 0
         ? slideImageUrls.map((url) => ({
             title: company.product_name,
@@ -141,7 +141,7 @@ function CompanyDetails() {
         : [
             {
                 title: company ? company.product_name : '',
-                image: `${API_URL}/media/company_slides/default-cover.jpg`,
+                image: getMediaUrl('company_slides/default-cover.jpg'),
                 content: company ? company.quick_description || '' : ''
             }
         ];
@@ -400,7 +400,7 @@ function CompanyDetails() {
                 {company.cover_image && (
                     <CardMedia
                         component="img"
-                        image={company.cover_image}
+                        image={getMediaUrl(company.cover_image)}
                         alt={`${company.product_name} cover`}
                         sx={{ width: '100%', height: { xs: 220, md: 360 }, objectFit: 'cover' }}
                     />
