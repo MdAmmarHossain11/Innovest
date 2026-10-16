@@ -1,11 +1,12 @@
 import os
+import mimetypes
 
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.http import Http404, JsonResponse
-from django.views.static import serve
+from django.core.files.storage import default_storage
+from django.http import FileResponse, Http404, JsonResponse
 from rest_framework import routers
 from backend.views import (
     CompanyBusinessPlanViewSet,
@@ -33,6 +34,8 @@ def public_uploaded_image(request, path):
         'company_covers',
         'company_logos',
         'company_slides',
+        'event_images',
+        'event_covers',
     }
     allowed_extensions = {'.avif', '.gif', '.jpeg', '.jpg', '.png', '.webp'}
     normalized_path = path.replace('\\', '/')
@@ -44,7 +47,13 @@ def public_uploaded_image(request, path):
         or os.path.splitext(normalized_path)[1].lower() not in allowed_extensions
     ):
         raise Http404
-    return serve(request, normalized_path, document_root=settings.MEDIA_ROOT)
+    try:
+        image = default_storage.open(normalized_path, 'rb')
+    except FileNotFoundError as error:
+        raise Http404 from error
+
+    content_type = mimetypes.guess_type(normalized_path)[0] or 'application/octet-stream'
+    return FileResponse(image, content_type=content_type)
 
 
 urlpatterns = [

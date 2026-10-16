@@ -7,7 +7,7 @@ from .serializers import CompanySerializer, CompanyPaymentSerializer
 from backend.models import CompanyPayment
 from django.db.models import Sum, Max
 from django.db import OperationalError
-from django.conf import settings
+from django.core.files.storage import default_storage
 import os
 import logging
 import json
@@ -15,9 +15,12 @@ import uuid
 from datetime import datetime
 from rest_framework.permissions import AllowAny
 
+logger = logging.getLogger(__name__)
+
 
 class FileUploadView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    allowed_upload_directories = {'company_documents', 'company_slides', 'uploads'}
 
     def post(self, request, format=None):
         if 'image' not in request.FILES:
@@ -26,49 +29,25 @@ class FileUploadView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        upload_to = request.POST.get('upload_to', 'uploads')
+        upload_to = request.data.get('upload_to', 'uploads')
+        if upload_to not in self.allowed_upload_directories:
+            return Response(
+                {'error': 'Unsupported upload directory'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         file_obj = request.FILES['image']
 
-        # Generate a unique filename
         ext = os.path.splitext(file_obj.name)[1]
         filename = f"{uuid.uuid4().hex}{ext}"
-
-        # Create the directory if it doesn't exist
-        upload_dir = os.path.join(settings.MEDIA_ROOT, upload_to)
-        os.makedirs(upload_dir, exist_ok=True)
-
-        # Save the file
-        file_path = os.path.join(upload_dir, filename)
-
-        # Add logging to debug the file upload
-        logger.info(f"Uploading file: {file_obj.name}")
-        logger.info(f"Upload directory: {upload_dir}")
-        logger.info(f"Full file path: {file_path}")
-        logger.info(f"MEDIA_ROOT: {settings.MEDIA_ROOT}")
-
-        with open(file_path, 'wb+') as destination:
-            for chunk in file_obj.chunks():
-                destination.write(chunk)
-
-        # Verify file was created
-        if os.path.exists(file_path):
-            logger.info(f"File successfully saved: {file_path}")
-            logger.info(f"File size: {os.path.getsize(file_path)} bytes")
-        else:
-            logger.error(f"File was not created: {file_path}")
-
-        # Return the relative URL
-        file_url = os.path.join(settings.MEDIA_URL, upload_to, filename)
+        stored_path = default_storage.save(f'{upload_to}/{filename}', file_obj)
+        logger.info("Uploaded file %s to configured media storage", stored_path)
 
         return Response({
             'status': 'success',
-            'filename': filename,
-            'url': file_url,
+            'filename': os.path.basename(stored_path),
+            'url': default_storage.url(stored_path),
             'uploaded_at': datetime.now().isoformat()
         })
-
-
-logger = logging.getLogger(__name__)
 
 
 class CompanyListView(generics.ListAPIView):
