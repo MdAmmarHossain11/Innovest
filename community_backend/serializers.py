@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import CommunityPost, CommunityComment
+from Innovest.fields import PublicMediaImageField
+from Innovest.media import public_media_url
 
 
 class CommunityPostSerializer(serializers.ModelSerializer):
@@ -8,7 +10,7 @@ class CommunityPostSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     # Community attachments are images only.  ImageField also verifies that
     # uploaded bytes are an actual image instead of trusting the file suffix.
-    attachment = serializers.ImageField(required=False, allow_null=True)
+    attachment = PublicMediaImageField(required=False, allow_null=True)
 
     class Meta:
         model = CommunityPost
@@ -32,11 +34,7 @@ class CommunityPostSerializer(serializers.ModelSerializer):
             profile_image = getattr(obj.user, 'profile_pic', None) or getattr(
                 obj.user, 'profile_picture', None)
             if profile_image:
-                if request:
-                    profile_picture_url = request.build_absolute_uri(
-                        profile_image.url)
-                else:
-                    profile_picture_url = profile_image.url
+                profile_picture_url = public_media_url(profile_image, request)
 
             return {
                 'id': obj.user.id,
@@ -70,11 +68,7 @@ class CommunityCommentSerializer(serializers.ModelSerializer):
             obj.user, 'profile_picture', None)
         if profile_image:
             request = self.context.get('request')
-            if request:
-                profile_picture_url = request.build_absolute_uri(
-                    profile_image.url)
-            else:
-                profile_picture_url = profile_image.url
+            profile_picture_url = public_media_url(profile_image, request)
 
         return {
             'id': obj.user.id,

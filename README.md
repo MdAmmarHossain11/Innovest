@@ -121,10 +121,9 @@ data and review provider limits before using this demo with real users or
 documents. Free-plan URLs remain provider-managed and are not a service-level
 guarantee of permanent availability.
 Uploaded profile, community, company, and event images use Django's configured
-media storage and are served from the API's `/media/` path when a relative media
-URL is used. Render's local uploads are ephemeral; configure all listed R2
-variables for durable image and file storage. The storage bucket must permit the
-configured signed URLs to be read.
+media storage and are served through stable API `/media/` URLs, which avoids
+expiring object-store links. Render's local uploads are ephemeral; configure all
+listed R2 variables for durable image and file storage.
 
 If Render reports an HTTP health-check timeout, review the service's **Logs**
 around the alert timestamp for worker timeouts, database connection failures,

@@ -105,7 +105,6 @@ function CompanyDetails({ id: propId, initialCompany = null, isDialog = false })
     const [error, setError] = useState(null);
     const [tabValue, setTabValue] = useState(0);
     const [isStarred, setIsStarred] = useState(false);
-    const [activeSlide, setActiveSlide] = useState(0);
     const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false);
     const [loginPromptOpen, setLoginPromptOpen] = useState(false);
     const [requestDialogOpen, setRequestDialogOpen] = useState(false);
@@ -124,38 +123,6 @@ function CompanyDetails({ id: propId, initialCompany = null, isDialog = false })
     });
     const [additionalTermsOpen, setAdditionalTermsOpen] = useState(false);
     const theme = useTheme();
-
-    // Dynamically generate slides from company.slide_image
-    let slideImages = [];
-    if (company && company.slide_image) {
-        try {
-            slideImages = JSON.parse(company.slide_image);
-        } catch (e) {
-            slideImages = [];
-        }
-    }
-    const slideImageUrls = slideImages.map(img => getMediaUrl(`company_slides/${img}`));
-    const slides = slideImageUrls.length > 0
-        ? slideImageUrls.map((url) => ({
-            title: company.product_name,
-            image: url,
-            content: company.quick_description || ''
-        }))
-        : [
-            {
-                title: company ? company.product_name : '',
-                image: getMediaUrl('company_slides/default-cover.jpg'),
-                content: company ? company.quick_description || '' : ''
-            }
-        ];
-
-    const handleNextSlide = () => {
-        setActiveSlide((prev) => (prev + 1) % slides.length);
-    };
-
-    const handlePrevSlide = () => {
-        setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -495,30 +462,6 @@ function CompanyDetails({ id: propId, initialCompany = null, isDialog = false })
                                             </Grid>
                                         </Grid>
 
-                                        {/* Slideshow Component */}
-                                        <Box
-                                            sx={{
-                                                position: 'relative',
-                                                width: '100%',
-                                                height: { xs: 'calc(100vw * 0.5625)', md: 'calc(100% * 0.5625)' },
-                                                maxHeight: { xs: '300px', md: '400px' },
-                                                mb: 4,
-                                                borderRadius: 2,
-                                                overflow: 'hidden',
-                                                boxShadow: theme.shadows[3],
-                                            }}
-                                        >
-                                            <CardMedia
-                                                component="img"
-                                                image={slides[activeSlide].image}
-                                                alt={slides[activeSlide].title}
-                                                sx={{
-                                                    height: '100%',
-                                                    width: '100%',
-                                                    objectFit: 'cover',
-                                                }}
-                                            />
-                                        </Box>
                                         {/*<Paper 
                                             variant="outlined"
                                             sx={{ 

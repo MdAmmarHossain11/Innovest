@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from .models import Company, FundraiseTerms, BusinessPlan
+from Innovest.fields import PublicMediaImageField
 
 class CompanySerializer(serializers.ModelSerializer):
+    cover_image = PublicMediaImageField(required=False, allow_null=True)
+
     class Meta:
         model = Company
         fields = ['id', 'user_id', 'product_name', 'quick_description', 'industry', 'city', 

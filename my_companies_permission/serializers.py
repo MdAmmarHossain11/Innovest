@@ -1,8 +1,13 @@
 from rest_framework import serializers
 from .models import CompanyPermission
 from authentication.models import CustomUser
+from Innovest.fields import PublicMediaImageField
+from Innovest.media import public_media_url
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    profile_pic = PublicMediaImageField(read_only=True)
+    profile_picture = PublicMediaImageField(read_only=True)
+
     class Meta:
         model = CustomUser
         fields = [
@@ -56,7 +61,8 @@ class PermitUserDetailSerializer(serializers.ModelSerializer):
     def get_profile_pic(self, obj):
         user = obj.user
         if user.profile_pic:
-            return user.profile_pic.url
+            return public_media_url(
+                user.profile_pic, self.context.get('request'))
         return None
 
     def get_full_name(self, obj):

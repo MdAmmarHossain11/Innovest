@@ -1,17 +1,34 @@
 from io import BytesIO
 from tempfile import TemporaryDirectory
+from types import SimpleNamespace
+from urllib.parse import urlparse
 
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files.storage import default_storage
-from django.test import TestCase, override_settings
+from django.test import RequestFactory, TestCase, override_settings
 from PIL import Image
 from rest_framework.test import APIClient
 
+from Innovest.media import public_media_url
 from companies.models import Company
 
 
 class PublicCompanyImageTests(TestCase):
+    def test_signed_storage_urls_are_replaced_with_stable_media_urls(self):
+        request = RequestFactory().get('/', secure=True)
+        image = SimpleNamespace(
+            name='profile_pics/avatar.png',
+            url='https://bucket.example/avatar.png?X-Amz-Expires=3600',
+        )
+
+        url = public_media_url(image, request)
+        parsed_url = urlparse(url)
+
+        self.assertEqual(parsed_url.path, '/media/profile_pics/avatar.png')
+        self.assertEqual(parsed_url.query, '')
+        self.assertEqual(parsed_url.scheme, 'https')
+
     def test_profile_picture_upload_is_available_from_media_url(self):
         user = get_user_model().objects.create_user(
             email='profile@example.com',

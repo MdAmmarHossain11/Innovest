@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import ChatMessage, ChatRequest
 from django.contrib.auth import get_user_model
+from Innovest.media import public_media_url
 
 User = get_user_model()
 
@@ -13,9 +14,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_profile_pic(self, obj):
         if hasattr(obj, 'profile_picture') and obj.profile_picture:
-            return obj.profile_picture.url
+            return public_media_url(
+                obj.profile_picture, self.context.get('request'))
         elif hasattr(obj, 'profile_pic') and obj.profile_pic:
-            return obj.profile_pic.url
+            return public_media_url(
+                obj.profile_pic, self.context.get('request'))
         return None
 
 class ChatMessageSerializer(serializers.ModelSerializer):

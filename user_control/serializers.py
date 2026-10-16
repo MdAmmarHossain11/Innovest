@@ -1,10 +1,13 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
+from Innovest.fields import PublicMediaImageField
 
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
+    profile_picture = PublicMediaImageField(required=False, allow_null=True)
+    profile_pic = PublicMediaImageField(required=False, allow_null=True)
     password = serializers.CharField(write_only=True, required=False, validators=[validate_password])
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)

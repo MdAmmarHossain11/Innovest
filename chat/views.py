@@ -9,6 +9,7 @@ from django.db import models
 import logging
 from django.db.models import Q
 from django.utils import timezone
+from Innovest.media import public_media_url
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -87,7 +88,10 @@ class UsersView(views.APIView):
                 logger.debug(f"Profile pic exists: {hasattr(user, 'profile_pic')}")
                 if hasattr(user, 'profile_pic'):
                     logger.debug(f"Profile pic value: {user.profile_pic}")
-                    logger.debug(f"Profile pic URL: {user.profile_pic.url if user.profile_pic else None}")
+                    logger.debug(
+                        "Profile pic URL: %s",
+                        public_media_url(user.profile_pic) if user.profile_pic else None,
+                    )
             
             return Response([{
                 'id': user.id,
@@ -96,7 +100,8 @@ class UsersView(views.APIView):
                 'last_name': user.last_name,
                 'title': user.title if hasattr(user, 'title') else None,
                 'profile_pic': (
-                    user.profile_pic.url if hasattr(user, 'profile_pic') and user.profile_pic else
+                    public_media_url(user.profile_pic, request)
+                    if hasattr(user, 'profile_pic') and user.profile_pic else
                     None
                 )
             } for user in users])

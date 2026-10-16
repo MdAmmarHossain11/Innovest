@@ -3,10 +3,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
+from Innovest.fields import PublicMediaImageField
+
 User = get_user_model()
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
+    profile_pic = PublicMediaImageField(required=False, allow_null=True)
 
     class Meta:
         model = User
@@ -49,6 +52,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 class UserSerializer(serializers.ModelSerializer):
+    profile_pic = PublicMediaImageField(required=False, allow_null=True)
     is_staff = serializers.BooleanField(read_only=True)
     is_superuser = serializers.BooleanField(read_only=True)
     is_active = serializers.BooleanField(read_only=True)

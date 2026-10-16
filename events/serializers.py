@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import CompanyEvent
 from authentication.models import CustomUser
+from Innovest.fields import PublicMediaImageField
 import logging
 from datetime import datetime
 
@@ -24,7 +25,7 @@ class CompanyEventSerializer(serializers.ModelSerializer):
     end_at = serializers.DateTimeField(required=False, allow_null=True)
     registration_end = serializers.DateTimeField(
         required=False, allow_null=True)
-    cover_image = serializers.ImageField(required=False, allow_null=True)
+    cover_image = PublicMediaImageField(required=False, allow_null=True)
 
     class Meta:
         model = CompanyEvent

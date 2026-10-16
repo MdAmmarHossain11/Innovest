@@ -4,6 +4,8 @@ from backend.models import CompanyFundraiseTerms, CompanyPayment
 import logging
 from decimal import Decimal
 from authentication.models import CustomUser
+from Innovest.fields import PublicMediaImageField
+from Innovest.media import public_media_url
 
 logger = logging.getLogger(__name__)
 
@@ -19,28 +21,12 @@ class CompanyFundraiseTermsSerializer(serializers.ModelSerializer):
         fields = ['raise_amount', 'pre_money_valuation', 'max_investors', 'duration', 'investment_type']
 
 class UserSerializer(serializers.ModelSerializer):
-    profile_picture = serializers.SerializerMethodField()
-    profile_pic = serializers.SerializerMethodField()
+    profile_picture = PublicMediaImageField(read_only=True)
+    profile_pic = PublicMediaImageField(read_only=True)
 
     class Meta:
         model = CustomUser
         fields = ['id', 'first_name', 'last_name', 'email', 'phone', 'address', 'city', 'country', 'profile_picture', 'profile_pic']
-
-    def get_profile_picture(self, obj):
-        if obj.profile_picture:
-            request = self.context.get('request')
-            if request:
-                return request.build_absolute_uri(obj.profile_picture.url)
-            return obj.profile_picture.url
-        return None
-
-    def get_profile_pic(self, obj):
-        if obj.profile_pic:
-            request = self.context.get('request')
-            if request:
-                return request.build_absolute_uri(obj.profile_pic.url)
-            return obj.profile_pic.url
-        return None
 
 class CompanyPaymentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -67,7 +53,7 @@ class CompanyPaymentSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
     fundraise_terms = serializers.SerializerMethodField()
     total_payments = serializers.SerializerMethodField()
-    cover_image = serializers.SerializerMethodField()
+    cover_image = PublicMediaImageField(read_only=True)
     
     class Meta:
         model = Company
@@ -75,14 +61,6 @@ class CompanySerializer(serializers.ModelSerializer):
                  'state', 'country', 'cover_image', 'slide_image', 'company_status', 
                  'created_at', 'fundraise_terms', 'total_payments']
     
-    def get_cover_image(self, obj):
-        if obj.cover_image:
-            request = self.context.get('request')
-            if request is not None:
-                return request.build_absolute_uri(obj.cover_image.url)
-            return obj.cover_image.url
-        return None
-
     def get_fundraise_terms(self, obj):
         fundraise_terms = obj.get_fundraise_terms()
         logger.debug(f"Getting fundraise terms for company {obj.id} - {obj.product_name}")

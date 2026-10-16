@@ -2,8 +2,10 @@ from rest_framework import serializers
 from authentication.models import CustomUser
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from Innovest.fields import PublicMediaImageField
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    profile_pic = PublicMediaImageField(required=False, allow_null=True)
     website = serializers.URLField(required=False, allow_blank=True, allow_null=True)
     dob = serializers.DateField(required=False, allow_null=True)
 

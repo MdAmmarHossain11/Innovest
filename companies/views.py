@@ -8,6 +8,7 @@ from backend.models import CompanyPayment
 from django.db.models import Sum, Max
 from django.db import OperationalError
 from django.core.files.storage import default_storage
+from Innovest.media import public_media_url
 import os
 import logging
 import json
@@ -45,7 +46,11 @@ class FileUploadView(APIView):
         return Response({
             'status': 'success',
             'filename': os.path.basename(stored_path),
-            'url': default_storage.url(stored_path),
+            'url': (
+                public_media_url(stored_path, request)
+                if upload_to == 'company_slides'
+                else default_storage.url(stored_path)
+            ),
             'uploaded_at': datetime.now().isoformat()
         })
 
