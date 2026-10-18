@@ -11,7 +11,7 @@
 
 InnoVest is a web-based startup investment platform designed to address funding challenges by connecting entrepreneurs and startup founders with potential investors. The platform provides an interactive environment where users can launch fundraising campaigns, explore investment opportunities, communicate with stakeholders, and make informed investment decisions through machine learning-based profitability prediction.
 
-Live Demo: https://innovest-md-ammar.vercel.app
+**Live Demo:** https://innovest-md-ammar.vercel.app
 
 ## Key Features
 
