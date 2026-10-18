@@ -97,3 +97,7 @@ database availability are not guaranteed.
    another verification message by submitting the same email again.
 7. Configure SSLCommerz credentials in Render only if payment features are
    needed. The application defaults to payment sandbox mode.
+
+## License
+
+MIT
