@@ -1,7 +1,29 @@
-# Innovest
+# InnoVest - Startup Investment & Fundraising Platform
 
-Innovest is a React and Django platform for startup discovery, investment
-management, company profiles, community posts, and administration.
+![React](https://img.shields.io/badge/React-JavaScript-61DAFB?logo=react&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-Runtime-339933?logo=node.js&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.x-blue.svg)
+![Django](https://img.shields.io/badge/Django-Framework-092E20?logo=django)
+![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white)
+![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Profitability%20Prediction-orange)
+![Status](https://img.shields.io/badge/Status-Completed-success)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+
+InnoVest is a web-based startup investment platform designed to address funding challenges by connecting entrepreneurs and startup founders with potential investors. The platform provides an interactive environment where users can launch fundraising campaigns, explore investment opportunities, communicate with stakeholders, and make informed investment decisions through machine learning-based profitability prediction.
+
+Live Demo: https://innovest-md-ammar.vercel.app
+
+## Key Features
+
+- **Fundraising Management:** Entrepreneurs can create fundraising campaigns, present their startup ideas, and track fundraising progress.
+- **Investor Connectivity:** Investors can explore startup opportunities, review project details, and evaluate potential investments.
+- **ML-Based Profitability Prediction:** Integrates machine learning to predict startup profitability, helping investors assess opportunities and make data-informed decisions.
+- **Real-Time Chat System:** Enables direct communication between entrepreneurs and investors for discussing projects, investment opportunities, and funding requirements.
+- **Progress Tracking:** Fundraisers can monitor campaign progress and keep stakeholders informed about funding activities.
+- **Community Posts & Discussions:** Users can publish community posts to share ideas, experiences, updates, and questions. Other users can comment on posts and reply to comments, supporting interactive discussions and community engagement.
+- **AI-Powered Mini Chatbot:** An integrated chatbot that allows users to ask questions and receive helpful guidance, relevant information, and directions on using the platform, exploring investment opportunities, and accessing key features.
+- **Admin Dashboard & Support:** Administrators oversee platform activities, manage users, provide support, and review fundraising campaigns. Campaigns require admin approval before publication, while admin-created campaigns follow a separate approval process.
+- **Event Management & Registration:** Administrators can create and publish events related to startups, entrepreneurship, and investment opportunities. Users can explore upcoming events and register to participate, encouraging community engagement, networking, and knowledge sharing.
 
 ## Project layout
 
@@ -75,66 +97,3 @@ database availability are not guaranteed.
    another verification message by submitting the same email again.
 7. Configure SSLCommerz credentials in Render only if payment features are
    needed. The application defaults to payment sandbox mode.
-
-### User and administrator records
-
-User records live in the Supabase PostgreSQL table
-`authentication_customuser`. In the Supabase dashboard, open **SQL Editor** to
-inspect accounts. For example:
-
-```sql
-SELECT id, email, first_name, last_name, user_type, is_staff, is_superuser,
-       is_active, email_verified
-FROM authentication_customuser
-ORDER BY id;
-```
-
-Do not insert or edit a plaintext password in SQL. Register an account through
-the website, verify its email, then promote only a trusted account to admin:
-
-```sql
-UPDATE authentication_customuser
-SET user_type = 'admin', is_staff = TRUE, is_superuser = TRUE
-WHERE email = 'trusted-admin@example.com';
-```
-
-To manually verify a known account whose email could not be delivered, use:
-
-```sql
-UPDATE authentication_customuser
-SET email_verified = TRUE, is_active = TRUE
-WHERE email = 'account@example.com';
-```
-
-Use these updates carefully: `is_superuser = TRUE` grants full Django
-administrative access. Never create user rows by inserting plaintext passwords;
-use the website registration flow first, then manage account status and trusted
-admin privileges through the Supabase SQL Editor or the site's admin dashboard.
-The application recognizes an administrator when `user_type = 'admin'`,
-`is_staff = TRUE`, or `is_superuser = TRUE`. Log out and back in after changing
-these flags so the browser reloads the user's current role.
-
-Render's free API service can sleep while idle, so its first request afterward
-can take about a minute. Supabase Free projects have a 500 MB database limit
-and can pause after a week without activity. Keep a separate backup of important
-data and review provider limits before using this demo with real users or
-documents. Free-plan URLs remain provider-managed and are not a service-level
-guarantee of permanent availability.
-Uploaded profile, community, company, and event images use Django's configured
-media storage and are served through stable API `/media/` URLs, which avoids
-expiring object-store links. Render's local uploads are ephemeral; configure all
-listed R2 variables for durable image and file storage.
-
-If Render reports an HTTP health-check timeout, review the service's **Logs**
-around the alert timestamp for worker timeouts, database connection failures,
-or restarts. The health endpoint is `/api/health/`; the Render start command
-uses a threaded Gunicorn worker to keep it responsive while another request is
-waiting on I/O.
-
-## Checks
-
-```bash
-python manage.py check
-python manage.py test community_backend
-cd frontend && npm run build
-```
