@@ -33,6 +33,8 @@ Live Demo: https://innovest-md-ammar.vercel.app
   Python packages - Django application modules.
 - `ml_api/` - startup analysis and prediction endpoints.
 
+---
+
 ## Local development
 
 1. Create and activate a Python virtual environment, then install dependencies:
@@ -61,6 +63,8 @@ Live Demo: https://innovest-md-ammar.vercel.app
 The frontend uses `http://localhost:8000` by default. Set
 `REACT_APP_API_URL` to the backend origin when running it outside local
 development.
+
+---
 
 ## Free hosting
 
@@ -98,6 +102,15 @@ database availability are not guaranteed.
 7. Configure SSLCommerz credentials in Render only if payment features are
    needed. The application defaults to payment sandbox mode.
 
+---
+
 ## License
 
-MIT
+This project is licensed under the **MIT License**.
+
+See the [`LICENSE`](LICENSE) file for more information.
+
+## Support
+
+If you find this project useful or interesting, consider giving the repository a ⭐ on GitHub.
+
