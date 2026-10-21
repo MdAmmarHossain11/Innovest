@@ -56,7 +56,7 @@ InnoVest is a web-based startup investment platform designed to address funding 
 
    ```bash
    cd frontend
-   npm ci
+   npm install
    npm start
    ```
 
